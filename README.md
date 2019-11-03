@@ -1,0 +1,1 @@
+Simple project allowing to get bing desktop background images

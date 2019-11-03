@@ -1,0 +1,12 @@
+﻿<Application x:Class="BingHomeDesktopBackground.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:BingHomeDesktopBackground"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <FontFamily x:Key="FontAwesome">/BingHomeDesktopBackground;component/Font Awesome 5 Free-Solid-900.otf#Font Awesome 5 Free Solid</FontFamily>
+            <FontFamily x:Key="Iconic">/BingHomeDesktopBackground;component/open-iconic.otf#Iconic</FontFamily>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
