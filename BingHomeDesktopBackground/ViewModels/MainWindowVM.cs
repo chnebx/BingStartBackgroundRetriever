@@ -75,6 +75,37 @@ namespace BingHomeDesktopBackground.ViewModels
             return Path.Combine(DocumentsPath, combineWith);
         }
 
+        public void CopyNewFoundFiles(string Fullpath)
+        {
+            ObservableCollection<string> files = new ObservableCollection<string>(Directory.GetFiles(Fullpath));
+            for (int i = 0; i < files.Count; i++)
+            {
+                FileInfo infos = new FileInfo(files[i]);
+                if (infos.Length > 300000)
+                {
+                    var fileName = Path.GetFileName(files[i]);
+                    var newPath = Path.Combine(tempPath, fileName);
+                    var newFile = Path.ChangeExtension(newPath, ".jpg");
+                    if (!File.Exists(newFile))
+                    {
+                        File.Copy(files[i], newFile);
+                    }
+                }
+            }
+        }
+
+        public void LoadImagesFromTemp(string tempPath)
+        {
+            foreach (string data in Directory.GetFiles(tempPath))
+            {
+                BitmapImage background = new BitmapImage(new Uri(data, UriKind.Absolute));
+                ImageElement newImage = new ImageElement();
+                newImage.CurrentImage = background;
+                newImage.CreationDate = new FileInfo(data).CreationTimeUtc;
+                Images.Add(newImage);
+            }
+        }
+
         public MainWindowVM()
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()) == true)
@@ -84,33 +115,14 @@ namespace BingHomeDesktopBackground.ViewModels
             CloseWindowCommand = new RelayCommand(CloseWindow);
             tempPath = BuildTempFolderPath();
             string Fullpath = BuildImagesSourcePath();
-            Results = new ObservableCollection<string>(Directory.GetFiles(Fullpath));
+            
             if (!Directory.Exists(tempPath))
             {
                 Directory.CreateDirectory(tempPath);
             }
-            for (int i = 0; i < Results.Count; i++)
-            {
-                FileInfo infos = new FileInfo(Results[i]);
-                if (infos.Length > 300000)
-                {
-                    var fileName = Path.GetFileName(Results[i]);
-                    var newPath = Path.Combine(tempPath, fileName);
-                    var newFile = Path.ChangeExtension(newPath, ".jpg");
-                    if (!File.Exists(newFile))
-                    {
-                        File.Copy(Results[i], newFile);
-                    }
-                }
-            }
-            foreach(string data in Directory.GetFiles(tempPath))
-            {
-                BitmapImage background = new BitmapImage(new Uri(data, UriKind.Absolute));
-                ImageElement newImage = new ImageElement();
-                newImage.CurrentImage = background;
-                newImage.CreationDate = new FileInfo(data).CreationTimeUtc;
-                Images.Add(newImage);
-            }
+            CopyNewFoundFiles(Fullpath);
+            LoadImagesFromTemp(tempPath);
+
             ImagesView = CollectionViewSource.GetDefaultView(Images);
             ImagesView.SortDescriptions.Add(new SortDescription("CurrentImage.Width", ListSortDirection.Descending));
             ImagesView.GroupDescriptions.Add(new PropertyGroupDescription("Type"));
