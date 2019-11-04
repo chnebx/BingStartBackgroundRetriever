@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:BingHomeDesktopBackground"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:viewmodels="clr-namespace:BingHomeDesktopBackground.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
@@ -12,7 +12,7 @@
     <Window.Resources>
         <viewmodels:MainWindowVM x:Key="VM" />
 
-        <Style TargetType="{x:Type CheckBox}">
+        <Style x:Key="CheckboxStyle" TargetType="{x:Type CheckBox}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
@@ -41,7 +41,20 @@
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Bing Desktop" Grid.Row="0" Margin="30,0,0,0" FontSize="48" FontWeight="Bold" VerticalAlignment="Center" Foreground="#FF6C6A6A" />
-        <ListBox BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="1">
+        <ListBox SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="1">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border Margin="5" Background="White">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
@@ -71,16 +84,52 @@
             </ListBox.GroupStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid x:Name="ContainerGrid">
                         <Border Background="White" x:Name="mask" CornerRadius="8" />
                         <Grid>
                             <Grid.OpacityMask>
                                 <VisualBrush Visual="{Binding ElementName=mask}" />
                             </Grid.OpacityMask>
-                            <Image MaxHeight="200" Source="{Binding Path=CurrentImage.UriSource}" />
-                            <Border Height="60" Width="60" Background="#DD697CAE" HorizontalAlignment="Right" CornerRadius="5,0,0,0" VerticalAlignment="Bottom">
-                                <!--<Image Source="/Icons/plus-4x.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
-                                <CheckBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Image x:Name="ImageElement" MaxHeight="200" Source="{Binding Path=CurrentImage.UriSource}">
+                            </Image>
+                            <Border Margin="0" ClipToBounds="True">
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                                <Setter Property="BorderBrush" Value="#FF697CAE" />
+                                                <Setter Property="BorderThickness" Value="10" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+
+                            </Border>
+                            <Border x:Name="CheckBoxBorder" Height="60" Width="60" HorizontalAlignment="Right" CornerRadius="5,0,0,0" VerticalAlignment="Bottom">
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                                <Setter Property="Background" Value="#FF697CAE" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="False">
+                                                <Setter Property="Background" Value="#CC6C6A6A" />
+                                                <Setter Property="Opacity" Value="0.9" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <CheckBox x:Name="CheckBoxSelect" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=IsSelected}">
+                                    <CheckBox.Style>
+                                        <Style BasedOn="{StaticResource CheckboxStyle}" TargetType="{x:Type CheckBox}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=ImageElement, Path=IsMouseOver}" Value="True">
+                                                    <Setter Property="IsChecked" Value="True" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </CheckBox.Style>
+                                </CheckBox>
                             </Border>
                         </Grid>
                     </Grid>
