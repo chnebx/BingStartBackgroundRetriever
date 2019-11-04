@@ -30,6 +30,20 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="StandardFlatBtn" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}">
+                            <ContentPresenter TextElement.Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        
     </Window.Resources>
     <Grid  ScrollViewer.HorizontalScrollBarVisibility="Disabled" DataContext="{StaticResource VM}">
         <Grid.RowDefinitions>
@@ -184,18 +198,23 @@
                 <Run Text="{Binding ShortDestinationPathName}"/>
             </TextBlock>
             <TextBlock Text="{Binding DestinationPath}" FontSize="14" FontStyle="Italic" Margin="0,0,0,20" />
-            <Button Height="30" Margin="0,0,50,0" Content="Copier les images" Background="#FF9BAAEA">
+            <Button Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30" Margin="0,0,50,0"  Content="Copier les images">
                 <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}">
-                                        <ContentPresenter TextElement.Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StandardFlatBtn}">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="True">
+                                <Setter Property="Background" Value="#FF9BAAEA" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#FFB0B0B0" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=SelectedImages.Count}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=DestinationPath}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>

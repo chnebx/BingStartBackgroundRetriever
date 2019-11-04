@@ -113,6 +113,7 @@ namespace BingHomeDesktopBackground.ViewModels
         public RelayCommand CloseWindowCommand { get; set; }
         public RelayCommand ListBoxSelectionChangedCommand { get; set; }
         public RelayCommand SelectDestinationPathCommand { get; set; }
+        public RelayCommand CopySelectedFilesCommand { get; set; }
 
         public MainWindowVM()
         {
@@ -123,6 +124,8 @@ namespace BingHomeDesktopBackground.ViewModels
             CloseWindowCommand = new RelayCommand(CloseWindow);
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
             SelectDestinationPathCommand = new RelayCommand(SelectDestinationPath);
+            CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
+
             tempPath = BuildTempFolderPath();
             string Fullpath = BuildImagesSourcePath();
             
@@ -137,6 +140,24 @@ namespace BingHomeDesktopBackground.ViewModels
             ImagesView.SortDescriptions.Add(new SortDescription("CurrentImage.Width", ListSortDirection.Descending));
             ImagesView.GroupDescriptions.Add(new PropertyGroupDescription("Type"));
 
+        }
+
+        private void CopySelectedFiles(object parameter)
+        {
+            if (SelectedImages.Count > 0) 
+            { 
+                foreach(ImageElement image in SelectedImages)
+                {
+                    Uri imagePath = image.CurrentImage.UriSource;
+                    if (imagePath.IsFile)
+                    {
+                        string fileName = System.IO.Path.GetFileName(imagePath.LocalPath);
+                        string Destination = Path.Combine(DestinationPath, fileName);
+                        File.Copy(image.CurrentImage.UriSource.LocalPath, Destination);
+                    }
+                   
+                }
+            }
         }
 
         private void SelectDestinationPath(object parameter)
