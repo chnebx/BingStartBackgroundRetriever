@@ -9,7 +9,6 @@ namespace BingHomeDesktopBackground.Models
     public class ImageElement: INotifyPropertyChanged
     {
         private BitmapImage _currentImage;
-        private bool _isSelected;
         private DateTime _creationDate;
 
         public enum ImageType
@@ -36,19 +35,6 @@ namespace BingHomeDesktopBackground.Models
                 {
                     Type = ImageType.Phone;
                 }
-            }
-        }
-
-        public bool IsSelected
-        {
-            get
-            {
-                return _isSelected;
-            }
-            set
-            {
-                _isSelected = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
             }
         }
 

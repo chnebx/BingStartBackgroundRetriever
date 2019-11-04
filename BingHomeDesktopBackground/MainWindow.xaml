@@ -41,7 +41,12 @@
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Bing Desktop" Grid.Row="0" Margin="30,0,0,0" FontSize="48" FontWeight="Bold" VerticalAlignment="Center" Foreground="#FF6C6A6A" />
-        <ListBox SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="1">
+        <ListBox x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="1">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="Template">
@@ -143,5 +148,57 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
+        <StackPanel Margin="10,0,0,0" Grid.Column="1" Grid.Row="1">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="Foreground" Value="#FF6A8CBD" />
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock FontSize="18" Margin="0,0,0,20">
+                <Run FontFamily="{StaticResource FontAwesome}" Text="" ></Run>
+                <Run Text=" Selected Pictures : " />
+                <Run Text="{Binding Source={StaticResource VM}, Path=SelectedImages.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontWeight="Bold" Margin="0,0,10,0"  Text="Destination " />
+                <Button Command="{Binding SelectDestinationPathCommand}" Foreground="#FFF1CD51" Content="" FontFamily="{StaticResource FontAwesome}">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="White" CornerRadius="4" Width="30" BorderBrush="LightGray" BorderThickness="1">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+            <TextBlock FontSize="16" Margin="0,10,0,5">
+                <Run Text="" FontFamily="{StaticResource FontAwesome}"></Run>
+                <Run Text=" " />
+                <Run Text="{Binding ShortDestinationPathName}"/>
+            </TextBlock>
+            <TextBlock Text="{Binding DestinationPath}" FontSize="14" FontStyle="Italic" Margin="0,0,0,20" />
+            <Button Height="30" Margin="0,0,50,0" Content="Copier les images" Background="#FF9BAAEA">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}">
+                                        <ContentPresenter TextElement.Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>
