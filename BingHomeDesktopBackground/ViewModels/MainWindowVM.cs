@@ -25,6 +25,7 @@ namespace BingHomeDesktopBackground.ViewModels
         private string _shortDestinationPathName;
         private ICollectionView _imagesView;
         private string _destinationPath;
+        private string sourcePath { get; set; }
 
         public ICollectionView ImagesView
         {
@@ -84,7 +85,7 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 if (_shortDestinationPathName == null)
                 {
-                    return "Non défini";
+                    return "Undefined";
                 }
                 return _shortDestinationPathName;
 
@@ -127,15 +128,16 @@ namespace BingHomeDesktopBackground.ViewModels
             CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
 
             tempPath = BuildTempFolderPath();
-            string Fullpath = BuildImagesSourcePath();
+            sourcePath = BuildImagesSourcePath();
             
             if (!Directory.Exists(tempPath))
             {
                 Directory.CreateDirectory(tempPath);
             }
-            CopyNewFoundFiles(Fullpath);
+            SynchronizeTempFilesWithSourceFiles();
+            CopyNewFoundFiles(sourcePath);
             LoadImagesFromTemp(tempPath);
-
+            
             ImagesView = CollectionViewSource.GetDefaultView(Images);
             ImagesView.SortDescriptions.Add(new SortDescription("CurrentImage.Width", ListSortDirection.Descending));
             ImagesView.GroupDescriptions.Add(new PropertyGroupDescription("Type"));
@@ -153,11 +155,15 @@ namespace BingHomeDesktopBackground.ViewModels
                     {
                         string fileName = System.IO.Path.GetFileName(imagePath.LocalPath);
                         string Destination = Path.Combine(DestinationPath, fileName);
-                        File.Copy(image.CurrentImage.UriSource.LocalPath, Destination);
+                        if (!File.Exists(Destination))
+                        {
+                            File.Copy(image.CurrentImage.UriSource.LocalPath, Destination);
+                        }
                     }
-                   
                 }
+                ((ListBox)parameter).SelectedItems.Clear();
             }
+
         }
 
         private void SelectDestinationPath(object parameter)
@@ -196,9 +202,9 @@ namespace BingHomeDesktopBackground.ViewModels
             return Path.Combine(DocumentsPath, combineWith);
         }
 
-        public void CopyNewFoundFiles(string Fullpath)
+        public void CopyNewFoundFiles(string fullPath)
         {
-            ObservableCollection<string> files = new ObservableCollection<string>(Directory.GetFiles(Fullpath));
+            ObservableCollection<string> files = new ObservableCollection<string>(Directory.GetFiles(fullPath));
             for (int i = 0; i < files.Count; i++)
             {
                 FileInfo infos = new FileInfo(files[i]);
@@ -223,7 +229,26 @@ namespace BingHomeDesktopBackground.ViewModels
                 ImageElement newImage = new ImageElement();
                 newImage.CurrentImage = background;
                 newImage.CreationDate = new FileInfo(data).CreationTimeUtc;
+                Console.WriteLine(newImage.CreationDate.Date);
                 Images.Add(newImage);
+            }
+        }
+
+        public void SynchronizeTempFilesWithSourceFiles()
+        {
+            HashSet<string> SourceElements = new HashSet<string>();
+            List<string> tempFiles = new List<string>(Directory.GetFiles(tempPath));
+            List<string> sourceFiles = new List<string>();
+            foreach(string element in Directory.GetFiles(sourcePath))
+            {
+                SourceElements.Add(Path.GetFileName(element));
+            }
+            foreach (string data in tempFiles)
+            {
+                if (!SourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
+                {
+                    File.Delete(data);
+                }
             }
         }
 
