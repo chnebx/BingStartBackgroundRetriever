@@ -154,7 +154,8 @@ namespace BingHomeDesktopBackground.ViewModels
                     Uri imagePath = image.CurrentImage.UriSource;
                     if (imagePath.IsFile)
                     {
-                        string fileName = System.IO.Path.GetFileName(imagePath.LocalPath);
+                        //string fileName = System.IO.Path.GetFileName(imagePath.LocalPath);
+                        string fileName = Path.ChangeExtension(image.Name, ".jpg");
                         string Destination = Path.Combine(DestinationPath, fileName);
                         if (!File.Exists(Destination))
                         {
