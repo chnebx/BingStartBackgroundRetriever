@@ -13,6 +13,7 @@ using BingHomeDesktopBackground.Models;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
+using System.Diagnostics;
 
 namespace BingHomeDesktopBackground.ViewModels
 {
@@ -228,8 +229,8 @@ namespace BingHomeDesktopBackground.ViewModels
                 BitmapImage background = new BitmapImage(new Uri(data, UriKind.Absolute));
                 ImageElement newImage = new ImageElement();
                 newImage.CurrentImage = background;
+                newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(data).Name);
                 newImage.CreationDate = new FileInfo(data).CreationTimeUtc;
-                Console.WriteLine(newImage.CreationDate.Date);
                 Images.Add(newImage);
             }
         }
@@ -238,7 +239,6 @@ namespace BingHomeDesktopBackground.ViewModels
         {
             HashSet<string> SourceElements = new HashSet<string>();
             List<string> tempFiles = new List<string>(Directory.GetFiles(tempPath));
-            List<string> sourceFiles = new List<string>();
             foreach(string element in Directory.GetFiles(sourcePath))
             {
                 SourceElements.Add(Path.GetFileName(element));
@@ -248,6 +248,7 @@ namespace BingHomeDesktopBackground.ViewModels
                 if (!SourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
                 {
                     File.Delete(data);
+                    Debug.WriteLine(data);
                 }
             }
         }

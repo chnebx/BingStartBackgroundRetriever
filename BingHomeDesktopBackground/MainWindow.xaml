@@ -169,11 +169,34 @@
                     <Setter Property="Foreground" Value="#FF6A8CBD" />
                 </Style>
             </StackPanel.Resources>
-            <TextBlock FontSize="18" Margin="0,0,0,20">
+            <TextBlock FontSize="18" Margin="0,0,0,10">
                 <Run FontFamily="{StaticResource FontAwesome}" Text="" ></Run>
                 <Run Text=" Selected Pictures : " />
                 <Run Text="{Binding Source={StaticResource VM}, Path=SelectedImages.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
             </TextBlock>
+            <ScrollViewer HorizontalAlignment="Left" Margin="10,10,0,30" MaxHeight="500" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding SelectedImages}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Width="160" Margin="0,0,0,10">
+                                <Image Margin="0,0,0,0"  Source="{Binding CurrentImage.UriSource}">
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext.Type}" Value="Phone">
+                                                    <Setter Property="Width" Value="50" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                                <TextBox Padding="5" BorderBrush="Gray" BorderThickness="0.5"  TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
             <StackPanel Orientation="Horizontal">
                 <TextBlock FontWeight="Bold" Margin="0,0,10,0"  Text="Destination " />
                 <Button Command="{Binding SelectDestinationPathCommand}" Foreground="#FFF1CD51" Content="" FontFamily="{StaticResource FontAwesome}">

@@ -10,6 +10,7 @@ namespace BingHomeDesktopBackground.Models
     {
         private BitmapImage _currentImage;
         private DateTime _creationDate;
+        private string _name;
 
         public enum ImageType
         {
@@ -49,6 +50,19 @@ namespace BingHomeDesktopBackground.Models
             set
             {
                 _creationDate = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Name")); 
             }
         }
 
