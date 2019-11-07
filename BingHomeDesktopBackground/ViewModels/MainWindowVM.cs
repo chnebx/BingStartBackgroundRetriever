@@ -14,6 +14,10 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using System.Diagnostics;
+using BingHomeDesktopBackground.Utilities;
+using System.Windows.Controls.Primitives;
+using System.Threading;
+using BingHomeDesktopBackground.Dialogs;
 
 namespace BingHomeDesktopBackground.ViewModels
 {
@@ -80,6 +84,7 @@ namespace BingHomeDesktopBackground.ViewModels
             }
         }
 
+
         public string ShortDestinationPathName
         {
             get
@@ -108,6 +113,8 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _destinationPath = value;
+                string dirName = new DirectoryInfo(DestinationPath).Name;
+                ShortDestinationPathName = dirName;
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }
         }
@@ -116,6 +123,7 @@ namespace BingHomeDesktopBackground.ViewModels
         public RelayCommand ListBoxSelectionChangedCommand { get; set; }
         public RelayCommand SelectDestinationPathCommand { get; set; }
         public RelayCommand CopySelectedFilesCommand { get; set; }
+        public RelayCommand OpenPopupCommand { get; set; }
 
         public MainWindowVM()
         {
@@ -123,10 +131,13 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 return;
             }
+            SettingsManager configManager = new SettingsManager();
+            DestinationPath = configManager.GetDefaultDestinationPath();
             CloseWindowCommand = new RelayCommand(CloseWindow);
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
             SelectDestinationPathCommand = new RelayCommand(SelectDestinationPath);
             CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
+            OpenPopupCommand = new RelayCommand(OpenPopup);
 
             tempPath = BuildTempFolderPath();
             sourcePath = BuildImagesSourcePath();
@@ -143,6 +154,18 @@ namespace BingHomeDesktopBackground.ViewModels
             ImagesView.SortDescriptions.Add(new SortDescription("CurrentImage.Width", ListSortDirection.Descending));
             ImagesView.GroupDescriptions.Add(new PropertyGroupDescription("Type"));
 
+        }
+
+        private void OpenPopup(object parameter)
+        {
+            ImageElement image = (ImageElement)parameter;
+            ZoomPopup popup = new ZoomPopup();
+            popup.SelectedImage = image;
+            popup.Title = image.Name;
+            if (popup.ShowDialog() == true)
+            {
+
+            }
         }
 
         private void CopySelectedFiles(object parameter)
@@ -174,8 +197,7 @@ namespace BingHomeDesktopBackground.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 DestinationPath = dialog.SelectedPath;
-                string dirName = new DirectoryInfo(DestinationPath).Name;
-                ShortDestinationPathName = dirName;
+                
             }
        
         }
