@@ -11,6 +11,8 @@ namespace BingHomeDesktopBackground.Models
     [Table("Settings")]
     public class Settings: INotifyPropertyChanged
     {
+        [PrimaryKey]
+        public int ID { get; set; }
         public string DefaultDestinationPath { get; set; }
         public string DefaultSourcePath { get; set; }
         public string DefaultTempPath { get; set; }

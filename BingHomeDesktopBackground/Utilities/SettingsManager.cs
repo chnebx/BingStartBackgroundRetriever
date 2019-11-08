@@ -26,6 +26,22 @@ namespace BingHomeDesktopBackground.Utilities
             InitData();
         }
 
+
+        public string BuildImagesSourcePath()
+        {
+            string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string combineWith = @"Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets";
+            return Path.Combine(AppDataPath, combineWith);
+        }
+
+        public string BuildTempFolderPath()
+        {
+            string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string combineWith = @"BingDesktopFinder\Temp";
+            return Path.Combine(DocumentsPath, combineWith);
+        }
+
+
         public static void InitData()
         {
             using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
@@ -36,14 +52,26 @@ namespace BingHomeDesktopBackground.Utilities
                 {
                     settings = new Settings
                     {
+                        ID = 0,
                         DefaultDestinationPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
-                        DefaultTempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "BingDesktopFinder")
+                        DefaultTempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"BingDesktopFinder\Temp"),
+                        DefaultSourcePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets"),
+                        DestinationPaths = new List<string>()
                     };
                     conn.Insert(settings);
                 }
             }
         }
 
+        public static void SaveDefaultDestinationPath(string path)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
+            {
+                conn.CreateTable<Settings>();
+                settings.DefaultDestinationPath = path;
+                conn.Update(settings);
+            }
+        }
        
 
         public static string ConnectionString = "Settings.db";

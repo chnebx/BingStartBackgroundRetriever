@@ -113,7 +113,7 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _destinationPath = value;
-                string dirName = "";
+                string dirName = new DirectoryInfo(DestinationPath).Name;
                 ShortDestinationPathName = dirName;
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }
@@ -131,16 +131,15 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 return;
             }
-            SettingsManager configManager = new SettingsManager();
-            DestinationPath = configManager.GetDefaultDestinationPath();
+            DestinationPath = SettingsManager.settings.DefaultDestinationPath;
             CloseWindowCommand = new RelayCommand(CloseWindow);
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
             SelectDestinationPathCommand = new RelayCommand(SelectDestinationPath);
             CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
             OpenPopupCommand = new RelayCommand(OpenPopup);
 
-            tempPath = BuildTempFolderPath();
-            sourcePath = BuildImagesSourcePath();
+            tempPath = SettingsManager.settings.DefaultTempPath;
+            sourcePath = SettingsManager.settings.DefaultSourcePath;
             
             if (!Directory.Exists(tempPath))
             {
@@ -177,7 +176,6 @@ namespace BingHomeDesktopBackground.ViewModels
                     Uri imagePath = image.CurrentImage.UriSource;
                     if (imagePath.IsFile)
                     {
-                        //string fileName = System.IO.Path.GetFileName(imagePath.LocalPath);
                         string fileName = Path.ChangeExtension(image.Name, ".jpg");
                         string Destination = Path.Combine(DestinationPath, fileName);
                         if (!File.Exists(Destination))
@@ -197,7 +195,7 @@ namespace BingHomeDesktopBackground.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 DestinationPath = dialog.SelectedPath;
-                
+                SettingsManager.SaveDefaultDestinationPath(DestinationPath);
             }
        
         }
@@ -212,20 +210,7 @@ namespace BingHomeDesktopBackground.ViewModels
             }
         }
 
-        public string BuildImagesSourcePath()
-        {
-            string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string combineWith = @"Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets";
-            return Path.Combine(AppDataPath, combineWith);
-        }
-
-        public string BuildTempFolderPath()
-        {
-            string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string combineWith = @"BingDesktopFinder\Temp";
-            return Path.Combine(DocumentsPath, combineWith);
-        }
-
+        
         public void CopyNewFoundFiles(string fullPath)
         {
             ObservableCollection<string> files = new ObservableCollection<string>(Directory.GetFiles(fullPath));
