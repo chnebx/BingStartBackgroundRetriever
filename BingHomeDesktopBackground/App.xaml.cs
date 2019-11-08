@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BingHomeDesktopBackground.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,9 @@ namespace BingHomeDesktopBackground
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            SettingsManager.Init();
+        }
     }
 }

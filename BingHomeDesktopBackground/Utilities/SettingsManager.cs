@@ -1,26 +1,56 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BingHomeDesktopBackground.Models;
+using Microsoft.Extensions.Configuration;
+using SQLite;
+using SQLiteNetExtensions.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace BingHomeDesktopBackground.Utilities
 {
     public class SettingsManager
     {
-        private IConfigurationRoot config;
+        public static Settings settings;
+
         public SettingsManager()
         {
-            config = new ConfigurationBuilder().AddJsonFile("Settings.json").Build();
-            if (config["DefaultDestinationPath"] == "")
+            
+        }
+
+        public static string DatabaseName = "Settings.db";
+
+        public static void Init()
+        {
+            InitData();
+        }
+
+        public static void InitData()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
             {
-                config["DefaultDestinationPath"] = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                conn.CreateTable<Settings>();
+                settings = conn.Table<Settings>().FirstOrDefault();
+                if (settings == null)
+                {
+                    settings = new Settings
+                    {
+                        DefaultDestinationPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+                        DefaultTempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "BingDesktopFinder")
+                    };
+                    conn.Insert(settings);
+                }
             }
         }
 
+       
+
+        public static string ConnectionString = "Settings.db";
+
         public string GetDefaultDestinationPath()
         {
-            return config["DefaultDestinationPath"];
+            return "";
         }
 
     }

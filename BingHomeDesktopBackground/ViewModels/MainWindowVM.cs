@@ -113,7 +113,7 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _destinationPath = value;
-                string dirName = new DirectoryInfo(DestinationPath).Name;
+                string dirName = "";
                 ShortDestinationPathName = dirName;
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }

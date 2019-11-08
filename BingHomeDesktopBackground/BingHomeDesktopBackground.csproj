@@ -20,6 +20,7 @@
     <None Remove="Icons\plus-8x.png" />
     <None Remove="Icons\plus.png" />
     <None Remove="open-iconic.otf" />
+    <None Remove="Settings.db" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,12 @@
       <VersionMinor>4</VersionMinor>
       <WrapperTool>tlbimp</WrapperTool>
     </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Settings.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +67,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
     <PackageReference Include="Ookii.Dialogs" Version="1.0.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
+    <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
 
@@ -87,12 +96,6 @@
 
   <ItemGroup>
     <Folder Include="Fonts\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
