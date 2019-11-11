@@ -1,4 +1,4 @@
-﻿<Window x:Class="BingHomeDesktopBackground.MainWindow"
+﻿<UserControl x:Class="BingHomeDesktopBackground.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,10 +7,9 @@
         xmlns:local="clr-namespace:BingHomeDesktopBackground"
         xmlns:viewmodels="clr-namespace:BingHomeDesktopBackground.ViewModels"
         mc:Ignorable="d"
-        Title="Bing Wallpaper Manager" Height="450" Width="800"
         >
-    <Window.Resources>
-        <viewmodels:MainWindowVM x:Key="VM" />
+    <UserControl.Resources>
+        <viewmodels:MainViewVM x:Key="VM" />
         <Style x:Key="CheckboxStyle" TargetType="{x:Type CheckBox}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -41,62 +40,16 @@
         </Style>
         
         
-    </Window.Resources>
+    </UserControl.Resources>
     <Grid ScrollViewer.HorizontalScrollBarVisibility="Disabled" DataContext="{StaticResource VM}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#FF436CA6">
-        </Border>
-        <DockPanel Grid.ColumnSpan="2" >
-            <TextBlock Text="Bing Wallpaper Manager" Grid.Row="0" Margin="30,0,0,0" Foreground="White" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" />
-            <Button HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0,0,0,2" Margin="40,25,30,25" Foreground="white">
-                <Button.Content>
-                    <TextBlock FontSize="24">
-                        <Run Text="" FontFamily="{StaticResource FontAwesome}" />
-                        <Run Text=" settings" />
-                    </TextBlock>
-                </Button.Content>
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border x:Name="SurroundingBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" >
-                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="SurroundingBorder" Property="BorderBrush" Value="White" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="False">
-                                            <Setter TargetName="SurroundingBorder" Property="BorderBrush" Value="Transparent" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                                
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Opacity" Value="1" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Opacity" Value="0.7" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-        </DockPanel>
-        <ListBox x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="1">
+        <ListBox x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
@@ -233,7 +186,7 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <ScrollViewer Margin="10,0,0,0" Grid.Column="1" Grid.Row="1">
+        <ScrollViewer Margin="10,0,0,0" Grid.Column="1" Grid.Row="0">
             <StackPanel Margin="0,20,0,0">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type TextBlock}">
@@ -382,4 +335,4 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
-</Window>
+</UserControl>

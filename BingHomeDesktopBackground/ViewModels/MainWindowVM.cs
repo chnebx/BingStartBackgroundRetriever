@@ -21,7 +21,7 @@ using BingHomeDesktopBackground.Dialogs;
 
 namespace BingHomeDesktopBackground.ViewModels
 {
-    public class MainWindowVM: INotifyPropertyChanged
+    public class MainViewVM: INotifyPropertyChanged
     {
         private ObservableCollection<ImageElement> _images = new ObservableCollection<ImageElement>();
         private ObservableCollection<ImageElement> _selectedImages = new ObservableCollection<ImageElement>();
@@ -125,7 +125,7 @@ namespace BingHomeDesktopBackground.ViewModels
         public RelayCommand CopySelectedFilesCommand { get; set; }
         public RelayCommand OpenPopupCommand { get; set; }
 
-        public MainWindowVM()
+        public MainViewVM()
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()) == true)
             {
