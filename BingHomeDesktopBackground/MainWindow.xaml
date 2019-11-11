@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:BingHomeDesktopBackground"
         xmlns:viewmodels="clr-namespace:BingHomeDesktopBackground.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Bing Wallpaper Manager" Height="450" Width="800"
         >
     <Window.Resources>
         <viewmodels:MainWindowVM x:Key="VM" />
@@ -53,7 +53,9 @@
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Bing Desktop" Grid.Row="0" Margin="30,0,0,0" FontSize="48" FontWeight="Bold" VerticalAlignment="Center" Foreground="#FF6C6A6A" />
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#FF436CA6">
+        </Border>
+        <TextBlock Text="Bing Wallpaper Manager" Grid.Row="0" Margin="30,0,0,0" Foreground="White" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" />
         <ListBox x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="1">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -102,7 +104,7 @@
             </ListBox.GroupStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ContainerGrid">
+                    <Grid Cursor="Hand" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ContainerGrid">
                         <Border Background="White" x:Name="mask" CornerRadius="8" />
                         <Grid>
                             <Grid.OpacityMask>
@@ -191,151 +193,153 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <StackPanel Margin="10,0,0,0" Grid.Column="1" Grid.Row="1">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="FontSize" Value="18" />
-                    <Setter Property="Foreground" Value="#FF6A8CBD" />
-                </Style>
-            </StackPanel.Resources>
-            <TextBlock FontSize="18" Margin="0,0,0,10">
+        <ScrollViewer Margin="10,0,0,0" Grid.Column="1" Grid.Row="1">
+            <StackPanel Margin="0,20,0,0">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="Foreground" Value="#FF6A8CBD" />
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontSize="18" Margin="0,0,0,10">
                 <Run FontFamily="{StaticResource FontAwesome}" Text="" ></Run>
                 <Run Text=" Selected Pictures : " />
                 <Run Text="{Binding Source={StaticResource VM}, Path=SelectedImages.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-            </TextBlock>
-            <ScrollViewer HorizontalAlignment="Left" Margin="10,10,0,30" MaxHeight="500" VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding SelectedImages}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Width="160" Margin="0,0,0,10">
-                                <Grid>
-                                    <Image Opacity="0.8" Margin="0,0,0,0"  Source="{Binding CurrentImage.UriSource}">
-                                        <Image.Style>
-                                            <Style TargetType="{x:Type Image}">
+                </TextBlock>
+                <ScrollViewer HorizontalAlignment="Left" Margin="10,10,0,30" MaxHeight="500" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding SelectedImages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="160" Margin="0,0,0,10">
+                                    <Grid>
+                                        <Image Opacity="0.8" Margin="0,0,0,0"  Source="{Binding CurrentImage.UriSource}">
+                                            <Image.Style>
+                                                <Style TargetType="{x:Type Image}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext.Type}" Value="Phone">
+                                                            <Setter Property="Width" Value="50" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <ToggleButton x:Name="EditToggleBtn" FontSize="24" Foreground="White" FontFamily="{StaticResource FontAwesome}" BorderThickness="0">
+                                            <ToggleButton.Style>
+                                                <Style TargetType="{x:Type ToggleButton}">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                                <Border 
+                                                                Background="{TemplateBinding Background}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Content" Value="" />
+                                                            <Setter Property="Background" Value="#44356DCF" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="False">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter Property="Background" Value="#44356DCF" />
+                                                            <Setter Property="Content" Value="" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ToggleButton.Style>
+                                        </ToggleButton>
+                                    </Grid>
+                                    <TextBox Padding="5" BorderBrush="Gray" BorderThickness="0.5"  TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.Style>
+                                            <Style TargetType="{x:Type TextBox}">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext.Type}" Value="Phone">
-                                                        <Setter Property="Width" Value="50" />
+                                                    <DataTrigger Binding="{Binding ElementName=EditToggleBtn, Path=IsChecked}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=EditToggleBtn, Path=IsChecked}" Value="False">
+                                                        <Setter Property="Visibility" Value="Collapsed"></Setter>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </Image.Style>
-                                    </Image>
-                                    <ToggleButton x:Name="EditToggleBtn" FontSize="24" Foreground="White" FontFamily="{StaticResource FontAwesome}" BorderThickness="0">
-                                        <ToggleButton.Style>
-                                            <Style TargetType="{x:Type ToggleButton}">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                                            <Border 
-                                                                Background="{TemplateBinding Background}"
-                                                                BorderThickness="{TemplateBinding BorderThickness}">
-                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Content" Value="" />
-                                                        <Setter Property="Background" Value="#44356DCF" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver" Value="False">
-                                                        <Setter Property="Background" Value="Transparent" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsChecked" Value="True">
-                                                        <Setter Property="Background" Value="#44356DCF" />
-                                                        <Setter Property="Content" Value="" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ToggleButton.Style>
-                                    </ToggleButton>
-                                </Grid>
-                                <TextBox Padding="5" BorderBrush="Gray" BorderThickness="0.5"  TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox.Style>
-                                        <Style TargetType="{x:Type TextBox}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=EditToggleBtn, Path=IsChecked}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible"></Setter>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding ElementName=EditToggleBtn, Path=IsChecked}" Value="False">
-                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBox.Style>
-                                </TextBox>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontWeight="Bold" Margin="0,0,10,0"  Text="Destination " />
-                <Button Command="{Binding SelectDestinationPathCommand}" Content="" FontFamily="{StaticResource FontAwesome}">
+                                        </TextBox.Style>
+                                    </TextBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" Margin="0,0,10,0"  Text="Destination " />
+                    <Button Command="{Binding SelectDestinationPathCommand}" Content="" FontFamily="{StaticResource FontAwesome}">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="White" CornerRadius="4" Width="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="#FF6475C5" />
+                                        <Setter Property="BorderBrush" Value="#FF6475C5" />
+                                        <Setter Property="BorderThickness" Value="1.5" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Foreground" Value="#FFF1CD51" />
+                                        <Setter Property="BorderBrush" Value="LightGray" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+                <TextBlock FontSize="16" Margin="0,10,0,5">
+                <Run Text="" FontFamily="{StaticResource FontAwesome}"></Run>
+                <Run Text=" " />
+                <Run Text="{Binding ShortDestinationPathName}"/>
+                </TextBlock>
+                <TextBlock Text="{Binding DestinationPath}" FontSize="14" FontStyle="Italic" Margin="0,0,0,20" />
+                <Button Cursor="Hand" Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30" Margin="0,0,50,0"  Content="Copier les images">
                     <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="White" CornerRadius="4" Width="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StandardFlatBtn}">
                             <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="#FF6475C5" />
-                                    <Setter Property="BorderBrush" Value="#FF6475C5" />
-                                    <Setter Property="BorderThickness" Value="1.5" />
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="#FFB0B0B0" />
                                 </Trigger>
-                                <Trigger Property="IsMouseOver" Value="False">
-                                    <Setter Property="Foreground" Value="#FFF1CD51" />
-                                    <Setter Property="BorderBrush" Value="LightGray" />
-                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsEnabled" Value="True" />
+                                        <Condition Property="IsMouseOver" Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="#FF1F2D66" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsEnabled" Value="True" />
+                                        <Condition Property="IsMouseOver" Value="False" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="#FF9BAAEA" />
+                                </MultiTrigger>
+                                <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=SelectedImages.Count}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=DestinationPath}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
                 </Button>
             </StackPanel>
-            <TextBlock FontSize="16" Margin="0,10,0,5">
-                <Run Text="" FontFamily="{StaticResource FontAwesome}"></Run>
-                <Run Text=" " />
-                <Run Text="{Binding ShortDestinationPathName}"/>
-            </TextBlock>
-            <TextBlock Text="{Binding DestinationPath}" FontSize="14" FontStyle="Italic" Margin="0,0,0,20" />
-            <Button Cursor="Hand" Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30" Margin="0,0,50,0"  Content="Copier les images">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StandardFlatBtn}">
-                        <Style.Triggers>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="#FFB0B0B0" />
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsEnabled" Value="True" />
-                                    <Condition Property="IsMouseOver" Value="True" />
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Background" Value="#FF1F2D66" />
-                            </MultiTrigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsEnabled" Value="True" />
-                                    <Condition Property="IsMouseOver" Value="False" />
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Background" Value="#FF9BAAEA" />
-                            </MultiTrigger>
-                            <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=SelectedImages.Count}" Value="0">
-                                <Setter Property="IsEnabled" Value="False"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=DestinationPath}" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-        </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
