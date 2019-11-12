@@ -119,7 +119,6 @@ namespace BingHomeDesktopBackground.ViewModels
             }
         }
 
-        public RelayCommand CloseWindowCommand { get; set; }
         public RelayCommand ListBoxSelectionChangedCommand { get; set; }
         public RelayCommand SelectDestinationPathCommand { get; set; }
         public RelayCommand CopySelectedFilesCommand { get; set; }
@@ -132,7 +131,6 @@ namespace BingHomeDesktopBackground.ViewModels
                 return;
             }
             DestinationPath = SettingsManager.settings.DefaultDestinationPath;
-            CloseWindowCommand = new RelayCommand(CloseWindow);
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
             SelectDestinationPathCommand = new RelayCommand(SelectDestinationPath);
             CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
@@ -140,19 +138,22 @@ namespace BingHomeDesktopBackground.ViewModels
 
             tempPath = SettingsManager.settings.DefaultTempPath;
             sourcePath = SettingsManager.settings.DefaultSourcePath;
-            
+
             if (!Directory.Exists(tempPath))
             {
                 Directory.CreateDirectory(tempPath);
             }
-            SynchronizeTempFilesWithSourceFiles();
-            LoadImagesFromTemp(tempPath);
-            
+            Images = SettingsManager.LoadedImages;
+            CreateView();
+        }
+
+        public void CreateView()
+        {
             ImagesView = CollectionViewSource.GetDefaultView(Images);
             ImagesView.SortDescriptions.Add(new SortDescription("CurrentImage.Width", ListSortDirection.Descending));
             ImagesView.GroupDescriptions.Add(new PropertyGroupDescription("Type"));
-
         }
+
 
         private void OpenPopup(object parameter)
         {
@@ -207,93 +208,6 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 SelectedImages.Add((ImageElement)images[i]);
             }
-        }
-
-        
-        public void CopyNewFoundFiles(string fullPath)
-        {
-            ObservableCollection<string> files = new ObservableCollection<string>(Directory.GetFiles(fullPath));
-            for (int i = 0; i < files.Count; i++)
-            {
-                bool wallpaperFile = CheckFileIsWallpaper(files[i]);
-                if (wallpaperFile)
-                {
-                    var fileName = Path.GetFileName(files[i]);
-                    var newPath = Path.Combine(tempPath, fileName);
-                    var newFile = Path.ChangeExtension(newPath, ".jpg");
-                    if (!File.Exists(newFile))
-                    {
-                        File.Copy(files[i], newFile);
-                    }
-                }
-            }
-        }
-
-        public void LoadImagesFromTemp(string tempPath)
-        {
-            foreach (string data in Directory.GetFiles(tempPath))
-            {
-                BitmapImage background = new BitmapImage(new Uri(data, UriKind.Absolute));
-                ImageElement newImage = new ImageElement();
-                newImage.CurrentImage = background;
-                newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(data).Name);
-                newImage.CreationDate = new FileInfo(data).CreationTimeUtc;
-                Images.Add(newImage);
-            }
-        }
-
-        public void SynchronizeTempFilesWithSourceFiles()
-        {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            HashSet<string> sourceElements = new HashSet<string>();
-            HashSet<string> tempElements = new HashSet<string>();
-            List<string> tempFiles = new List<string>(Directory.GetFiles(tempPath));
-            foreach (string tempElement in Directory.GetFiles(tempPath))
-            {
-                tempElements.Add(Path.GetFileNameWithoutExtension(tempElement));
-            }
-            foreach (string sourceElement in Directory.GetFiles(sourcePath))
-            {
-                if (CheckFileIsWallpaper(sourceElement))
-                {
-                    string fileName = Path.GetFileName(sourceElement);
-                    sourceElements.Add(fileName);
-                    if (!tempElements.Contains(fileName))
-                    {
-                        var newPath = Path.Combine(tempPath, fileName);
-                        var newFile = Path.ChangeExtension(newPath, ".jpg");
-                        if (!File.Exists(newFile))
-                        {
-                            File.Copy(sourceElement, newFile);
-                        }
-                    }
-                }
-            }
-            foreach (string data in tempFiles)
-            {
-                if (!sourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
-                {
-                    File.Delete(data);
-                }
-            }
-            watch.Stop();
-            Debug.WriteLine(watch.ElapsedMilliseconds);
-        }
-
-        public bool CheckFileIsWallpaper(string path)
-        {
-            Bitmap img = new Bitmap(path);
-            if (img.Width > 1000 && img.Height > 1000)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private void CloseWindow(object parameter)
-        {
-            Directory.Delete(tempPath);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

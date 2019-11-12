@@ -9,7 +9,6 @@
         mc:Ignorable="d"
         >
     <UserControl.Resources>
-        <viewmodels:MainViewVM x:Key="VM" />
         <Style x:Key="CheckboxStyle" TargetType="{x:Type CheckBox}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -41,7 +40,7 @@
         
         
     </UserControl.Resources>
-    <Grid ScrollViewer.HorizontalScrollBarVisibility="Disabled" DataContext="{StaticResource VM}">
+    <Grid ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -49,7 +48,7 @@
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView}" Grid.Column="0" Grid.Row="0">
+        <ListBox x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
@@ -143,7 +142,7 @@
                                     </CheckBox.Style>
                                 </CheckBox>
                             </Border>
-                            <Button Cursor="Hand" x:Name="zoomBtn" Command="{Binding Source={StaticResource VM}, Path=OpenPopupCommand}" CommandParameter="{Binding}"  Foreground="White" FontSize="16" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0" Content="" FontFamily="{StaticResource FontAwesome}">
+                            <Button Cursor="Hand" x:Name="zoomBtn" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, Path=DataContext.OpenPopupCommand}" CommandParameter="{Binding}"  Foreground="White" FontSize="16" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0" Content="" FontFamily="{StaticResource FontAwesome}">
                                 <Button.Style>
                                     <Style TargetType="{x:Type Button}">
                                         <Setter Property="Template">
@@ -197,7 +196,7 @@
                 <TextBlock FontSize="18" Margin="0,0,0,10">
                 <Run FontFamily="{StaticResource FontAwesome}" Text="" ></Run>
                 <Run Text=" Selected Pictures : " />
-                <Run Text="{Binding Source={StaticResource VM}, Path=SelectedImages.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Run Text="{Binding Path=SelectedImages.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </TextBlock>
                 <ScrollViewer HorizontalAlignment="Left" Margin="10,10,0,30" MaxHeight="500" VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding SelectedImages}">
@@ -322,10 +321,10 @@
                                     </MultiTrigger.Conditions>
                                     <Setter Property="Background" Value="#FF9BAAEA" />
                                 </MultiTrigger>
-                                <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=SelectedImages.Count}" Value="0">
+                                <DataTrigger Binding="{Binding Path=SelectedImages.Count}" Value="0">
                                     <Setter Property="IsEnabled" Value="False"></Setter>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Source={StaticResource VM}, Path=DestinationPath}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding Path=DestinationPath}" Value="{x:Null}">
                                     <Setter Property="IsEnabled" Value="False"></Setter>
                                 </DataTrigger>
                             </Style.Triggers>

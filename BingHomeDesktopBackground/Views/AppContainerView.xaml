@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:BingHomeDesktopBackground.Views"
         xmlns:vm="clr-namespace:BingHomeDesktopBackground.ViewModels"
         xmlns:cc="clr-namespace:BingHomeDesktopBackground"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="Bing Wallpaper Manager" Height="450" Width="800">
     <Window.Resources>
@@ -31,18 +32,26 @@
         </Border>
         <DockPanel Grid.Row="0">
             <TextBlock Text="Bing Wallpaper Manager" Grid.Row="0" Margin="30,0,0,0" Foreground="White" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" />
-            <Button Command="{Binding Path=OpenSettingsCommand}" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0,0,0,2" Margin="40,25,30,25" Foreground="white">
-                <Button.Content>
+            <ToggleButton HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0,0,0,2" Margin="40,25,30,25" Foreground="white">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding Path=OpenSettingsCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding Path=CloseSettingsCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ToggleButton.Content>
                     <TextBlock FontSize="24">
                         <Run Text="" FontFamily="{StaticResource FontAwesome}" />
                         <Run Text=" settings" />
                     </TextBlock>
-                </Button.Content>
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
+                </ToggleButton.Content>
+                <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}">
                         <Setter Property="Template">
                             <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
                                     <Border x:Name="SurroundingBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" >
                                         <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </Border>
@@ -69,8 +78,8 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                </Button.Style>
-            </Button>
+                </ToggleButton.Style>
+            </ToggleButton>
         </DockPanel>
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
         <!--<cc:MainView Grid.Row="1">

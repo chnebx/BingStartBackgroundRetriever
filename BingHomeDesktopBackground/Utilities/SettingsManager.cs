@@ -4,6 +4,8 @@ using SQLite;
 using SQLiteNetExtensions.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -72,9 +74,11 @@ namespace BingHomeDesktopBackground.Utilities
                 conn.Update(settings);
             }
         }
-       
+        
+        public static ObservableCollection<ImageElement> LoadedImages { get; set; }
 
         public static string ConnectionString = "Settings.db";
+
 
         public string GetDefaultDestinationPath()
         {
