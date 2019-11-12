@@ -4,25 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BingHomeDesktopBackground.Views"
+        xmlns:vm="clr-namespace:BingHomeDesktopBackground.ViewModels"
         xmlns:cc="clr-namespace:BingHomeDesktopBackground"
         mc:Ignorable="d"
-        Title="AppContainerView" Height="450" Width="800">
+        Title="Bing Wallpaper Manager" Height="450" Width="800">
     <Window.Resources>
-        
+        <DataTemplate DataType="{x:Type vm:MainViewVM}">
+            <local:MainView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewVM}">
+            <local:SettingsView />
+        </DataTemplate>
     </Window.Resources>
+    <Window.DataContext>
+        <vm:AppContainerViewVM />
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <cc:MainView x:Key="MainView" />
+            
         </Grid.Resources>
         <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#FF436CA6">
         </Border>
         <DockPanel Grid.Row="0">
             <TextBlock Text="Bing Wallpaper Manager" Grid.Row="0" Margin="30,0,0,0" Foreground="White" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" />
-            <Button HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0,0,0,2" Margin="40,25,30,25" Foreground="white">
+            <Button Command="{Binding Path=OpenSettingsCommand}" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0,0,0,2" Margin="40,25,30,25" Foreground="white">
                 <Button.Content>
                     <TextBlock FontSize="24">
                         <Run Text="" FontFamily="{StaticResource FontAwesome}" />
@@ -63,6 +72,10 @@
                 </Button.Style>
             </Button>
         </DockPanel>
-        <cc:MainView Grid.Row="1" />
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
+        <!--<cc:MainView Grid.Row="1">
+            
+        </cc:MainView>-->
+
     </Grid>
 </Window>
