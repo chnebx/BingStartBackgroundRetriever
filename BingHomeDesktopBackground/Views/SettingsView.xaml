@@ -6,13 +6,49 @@
              xmlns:local="clr-namespace:BingHomeDesktopBackground.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="FolderBtn" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="White" CornerRadius="4" Width="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#FF6475C5" />
+                    <Setter Property="BorderBrush" Value="#FF6475C5" />
+                    <Setter Property="BorderThickness" Value="1.5" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Foreground" Value="#FFF1CD51" />
+                    <Setter Property="BorderBrush" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid Margin="50,0,50,0">
+        
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="70" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="Bing Desktop Root Folder : " VerticalAlignment="Center" />
+        <TextBlock Text="Settings" FontWeight="Bold" FontSize="35" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="#FF4487C1" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock FontSize="16" Foreground="#FF666666" Margin="0,0,10,0" Width="150" Text="Bing Assets Folder : " VerticalAlignment="Center" />
+            <TextBox VerticalContentAlignment="Center" Width="400" Height="25" Margin="0,0,0,0" />
+            <Button Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock FontSize="16" Foreground="#FF666666" Margin="0,0,10,0" Width="150" Text="Temp Folder  : " VerticalAlignment="Center" />
+            <TextBox VerticalContentAlignment="Center" Width="400" Height="25" Margin="0,0,0,0" />
+            <Button Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
+        </StackPanel>
     </Grid>
 </UserControl>

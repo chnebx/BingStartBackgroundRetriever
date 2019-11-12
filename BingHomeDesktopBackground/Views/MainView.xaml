@@ -37,8 +37,31 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
-        
+
+        <Style x:Key="FolderBtn" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="White" CornerRadius="4" Width="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#FF6475C5" />
+                    <Setter Property="BorderBrush" Value="#FF6475C5" />
+                    <Setter Property="BorderThickness" Value="1.5" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Foreground" Value="#FFF1CD51" />
+                    <Setter Property="BorderBrush" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
     </UserControl.Resources>
     <Grid ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <Grid.RowDefinitions>
@@ -267,31 +290,8 @@
                 </ScrollViewer>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontWeight="Bold" Margin="0,0,10,0"  Text="Destination " />
-                    <Button Command="{Binding SelectDestinationPathCommand}" Content="" FontFamily="{StaticResource FontAwesome}">
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type Button}">
-                                            <Border Background="White" CornerRadius="4" Width="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                                <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="#FF6475C5" />
-                                        <Setter Property="BorderBrush" Value="#FF6475C5" />
-                                        <Setter Property="BorderThickness" Value="1.5" />
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Foreground" Value="#FFF1CD51" />
-                                        <Setter Property="BorderBrush" Value="LightGray" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
+                    <Button Style="{StaticResource FolderBtn}" Command="{Binding SelectDestinationPathCommand}" Content="" FontFamily="{StaticResource FontAwesome}">
+                       
                     </Button>
                 </StackPanel>
                 <TextBlock FontSize="16" Margin="0,10,0,5">
