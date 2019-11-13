@@ -61,12 +61,6 @@
                     </MultiTrigger.Conditions>
                     <Setter Property="Background" Value="#FF9BAAEA" />
                 </MultiTrigger>
-                <DataTrigger Binding="{Binding Path=SelectedImages.Count}" Value="0">
-                    <Setter Property="IsEnabled" Value="False"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=DestinationPath}" Value="{x:Null}">
-                    <Setter Property="IsEnabled" Value="False"></Setter>
-                </DataTrigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>

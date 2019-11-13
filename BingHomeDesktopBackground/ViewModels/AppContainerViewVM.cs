@@ -52,8 +52,9 @@ namespace BingHomeDesktopBackground.ViewModels
         {
             tempPath = SettingsManager.settings.DefaultTempPath;
             sourcePath = SettingsManager.settings.DefaultSourcePath;
-            SettingsManager.LoadedImages = LoadImagesFromTemp(tempPath);
             SynchronizeTempFilesWithSourceFiles();
+            SettingsManager.LoadedImages = LoadImagesFromTemp(tempPath);
+            
         }
 
         public void SynchronizeTempFilesWithSourceFiles()
@@ -86,7 +87,7 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 if (!sourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
                 {
-                    File.Delete(data);
+                    File.Delete(data); 
                 }
             }
         }
