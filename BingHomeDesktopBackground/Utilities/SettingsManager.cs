@@ -74,6 +74,17 @@ namespace BingHomeDesktopBackground.Utilities
                 conn.Update(settings);
             }
         }
+
+        public static void SaveSettings(string sourcePath, string tempPath)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
+            {
+                conn.CreateTable<Settings>();
+                settings.DefaultTempPath = tempPath;
+                settings.DefaultSourcePath = sourcePath;
+                conn.Update(settings);
+            }
+        }
         
         public static ObservableCollection<ImageElement> LoadedImages { get; set; }
 
