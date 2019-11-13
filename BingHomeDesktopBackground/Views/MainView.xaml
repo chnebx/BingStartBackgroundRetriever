@@ -61,6 +61,34 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="FlatBtn" TargetType="{x:Type Button}" BasedOn="{StaticResource StandardFlatBtn}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#FFB0B0B0" />
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsEnabled" Value="True" />
+                        <Condition Property="IsMouseOver" Value="True" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#FF1F2D66" />
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsEnabled" Value="True" />
+                        <Condition Property="IsMouseOver" Value="False" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#FF9BAAEA" />
+                </MultiTrigger>
+                <DataTrigger Binding="{Binding Path=SelectedImages.Count}" Value="0">
+                    <Setter Property="IsEnabled" Value="False"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=DestinationPath}" Value="{x:Null}">
+                    <Setter Property="IsEnabled" Value="False"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
 
     </UserControl.Resources>
     <Grid ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -300,36 +328,8 @@
                 <Run Text="{Binding ShortDestinationPathName}"/>
                 </TextBlock>
                 <TextBlock Text="{Binding DestinationPath}" FontSize="14" FontStyle="Italic" Margin="0,0,0,20" />
-                <Button Cursor="Hand" Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30" Margin="0,0,50,0"  Content="Copier les images">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StandardFlatBtn}">
-                            <Style.Triggers>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Background" Value="#FFB0B0B0" />
-                                </Trigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsEnabled" Value="True" />
-                                        <Condition Property="IsMouseOver" Value="True" />
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Background" Value="#FF1F2D66" />
-                                </MultiTrigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsEnabled" Value="True" />
-                                        <Condition Property="IsMouseOver" Value="False" />
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Background" Value="#FF9BAAEA" />
-                                </MultiTrigger>
-                                <DataTrigger Binding="{Binding Path=SelectedImages.Count}" Value="0">
-                                    <Setter Property="IsEnabled" Value="False"></Setter>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=DestinationPath}" Value="{x:Null}">
-                                    <Setter Property="IsEnabled" Value="False"></Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
+                <Button Style="{StaticResource FlatBtn}" Cursor="Hand" Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30" Margin="0,0,50,0"  Content="Copier les images">
+                    
                 </Button>
             </StackPanel>
         </ScrollViewer>
