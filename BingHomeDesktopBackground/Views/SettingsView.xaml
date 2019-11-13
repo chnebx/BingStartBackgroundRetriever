@@ -77,13 +77,13 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBlock FontSize="16" Foreground="#FF666666" Margin="0,0,10,0" Width="150" Text="Bing Assets Folder : " VerticalAlignment="Center" />
             <TextBox Text="{Binding SourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Width="400" Height="25" Margin="0,0,0,0" />
-            <Button Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
+            <Button Command="{Binding Path=SelectSourcePathCommand}" Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock FontSize="16" Foreground="#FF666666" Margin="0,0,10,0" Width="150" Text="Temp Folder  : " VerticalAlignment="Center" />
             <TextBox Text="{Binding TempPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Width="400" Height="25" Margin="0,0,0,0" />
-            <Button Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
+            <Button  Command="{Binding Path=SelectTempPathCommand}" Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
         </StackPanel>
-        <Button Style="{StaticResource FlatBtn}" Grid.Row="3" Width="120" Height="28" HorizontalAlignment="Left" Content="Save" />
+        <Button Command="{Binding Path=SaveSettingsCommand}" Style="{StaticResource FlatBtn}" Grid.Row="3" Width="120" Height="28" HorizontalAlignment="Left" Content="Save" />
     </Grid>
 </UserControl>
