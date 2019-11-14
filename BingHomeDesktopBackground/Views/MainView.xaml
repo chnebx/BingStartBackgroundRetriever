@@ -93,13 +93,14 @@
     </UserControl.Resources>
     <Grid ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0">
+        <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
@@ -236,7 +237,7 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <ScrollViewer Margin="10,0,0,0" Grid.Column="1" Grid.Row="0">
+        <ScrollViewer Margin="10,0,0,0" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
             <StackPanel Margin="0,20,0,0">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type TextBlock}">

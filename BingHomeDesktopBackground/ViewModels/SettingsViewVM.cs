@@ -60,7 +60,7 @@ namespace BingHomeDesktopBackground.ViewModels
 
         private void SelectSourcePath(object parameter)
         {
-            string sourcePath = GetDialogPath();
+            string sourcePath = GetDialogPath(SourcePath);
             if (sourcePath != null)
             {
                 SourcePath = sourcePath;
@@ -70,16 +70,17 @@ namespace BingHomeDesktopBackground.ViewModels
 
         private void SelectTempPath(object parameter)
         {
-            string tempPath = GetDialogPath();
+            string tempPath = GetDialogPath(TempPath);
             if (tempPath != null)
             {
                 TempPath = tempPath;
             }
         }
 
-        private string GetDialogPath()
+        private string GetDialogPath(string path)
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+            dialog.SelectedPath = path;
             if (dialog.ShowDialog() == true)
             {
                 return dialog.SelectedPath;
