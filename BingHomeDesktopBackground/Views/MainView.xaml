@@ -42,7 +42,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="White" CornerRadius="4" Width="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border Padding="{TemplateBinding Padding}" Background="White" CornerRadius="4" Width="{TemplateBinding Width}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                             <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
@@ -100,8 +100,8 @@
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1" >
-            <StackPanel Margin="30,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
-                <CheckBox FontSize="14" Foreground="#FF666666">
+            <StackPanel Height="50" Margin="30,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
+                <CheckBox VerticalAlignment="Center" FontSize="14" Margin="0,0,20,0" Foreground="#FF666666">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
                             <i:InvokeCommandAction Command="{Binding Path=SelectAllCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
@@ -123,6 +123,16 @@
                         </Style>
                     </CheckBox.Style>
                 </CheckBox>
+                <TextBlock VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0" Foreground="#FF888888" FontWeight="Bold" Text="Destination " />
+                <ComboBox Height="30" ItemsSource="{Binding}" Width="200" />
+                <Button Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource FolderBtn}" Command="{Binding SelectDestinationPathCommand}">
+                    <Button.Content>
+                        <TextBlock>
+                            <Run Text="" FontFamily="{StaticResource FontAwesome}" />
+                            <Run Text=" Ajouter" />
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
             </StackPanel>
         </Border>
         <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
@@ -343,12 +353,6 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontWeight="Bold" Margin="0,0,10,0"  Text="Destination " />
-                    <Button Style="{StaticResource FolderBtn}" Command="{Binding SelectDestinationPathCommand}" Content="" FontFamily="{StaticResource FontAwesome}">
-                       
-                    </Button>
-                </StackPanel>
                 <TextBlock FontSize="16" Margin="0,10,0,5">
                 <Run Text="" FontFamily="{StaticResource FontAwesome}"></Run>
                 <Run Text=" " />
