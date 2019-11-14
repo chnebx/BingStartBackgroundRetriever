@@ -122,6 +122,8 @@ namespace BingHomeDesktopBackground.ViewModels
         public RelayCommand ListBoxSelectionChangedCommand { get; set; }
         public RelayCommand SelectDestinationPathCommand { get; set; }
         public RelayCommand CopySelectedFilesCommand { get; set; }
+        public RelayCommand SelectAllCommand { get; set; }
+        public RelayCommand UnSelectAllCommand { get; set; }
         public RelayCommand OpenPopupCommand { get; set; }
 
         public MainViewVM()
@@ -134,6 +136,8 @@ namespace BingHomeDesktopBackground.ViewModels
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
             SelectDestinationPathCommand = new RelayCommand(SelectDestinationPath);
             CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
+            SelectAllCommand = new RelayCommand(SelectAll);
+            UnSelectAllCommand = new RelayCommand(UnSelectAll);
             OpenPopupCommand = new RelayCommand(OpenPopup);
 
             tempPath = SettingsManager.settings.DefaultTempPath;
@@ -145,6 +149,21 @@ namespace BingHomeDesktopBackground.ViewModels
             }
             Images = SettingsManager.LoadedImages;
             CreateView();
+        }
+
+        private void UnSelectAll(object parameter)
+        {
+            ListBox imagesListBox = (ListBox)parameter;
+            imagesListBox.SelectedItems.Clear();
+        }
+
+        private void SelectAll(object parameter)
+        {
+            ListBox imagesListBox = (ListBox)parameter;
+            foreach(ImageElement image in Images)
+            {
+                imagesListBox.SelectedItems.Add(image);
+            }
         }
 
         public void CreateView()

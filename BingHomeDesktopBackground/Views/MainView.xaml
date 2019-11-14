@@ -88,9 +88,8 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
-
     </UserControl.Resources>
+    
     <Grid ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -100,7 +99,33 @@
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="250"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,20,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
+        <Border Grid.Column="0" Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1" >
+            <StackPanel Margin="30,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
+                <CheckBox FontSize="14" Foreground="#FF666666">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <i:InvokeCommandAction Command="{Binding Path=SelectAllCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="Unchecked">
+                            <i:InvokeCommandAction Command="{Binding Path=UnSelectAllCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <CheckBox.Style>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="Tout déselectionner" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="Tout Sélectionner" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
+            </StackPanel>
+        </Border>
+        <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
@@ -237,8 +262,9 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
+        <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="1,0,0,0" BorderBrush="LightGray" />
         <ScrollViewer Margin="10,0,0,0" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
-            <StackPanel Margin="0,20,0,0">
+            <StackPanel HorizontalAlignment="Center" Margin="0,20,0,0">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="FontSize" Value="18" />
