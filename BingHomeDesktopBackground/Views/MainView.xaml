@@ -124,7 +124,7 @@
                     </CheckBox.Style>
                 </CheckBox>
                 <TextBlock VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0" Foreground="#FF888888" FontWeight="Bold" Text="Destination " />
-                <ComboBox Height="30" ItemsSource="{Binding}" Width="200" />
+                <ComboBox Height="30" ItemsSource="{Binding Paths, UpdateSourceTrigger=PropertyChanged}" Width="200" />
                 <Button Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource FolderBtn}" Command="{Binding SelectDestinationPathCommand}">
                     <Button.Content>
                         <TextBlock>

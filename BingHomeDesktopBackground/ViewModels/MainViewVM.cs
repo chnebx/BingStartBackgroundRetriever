@@ -30,6 +30,8 @@ namespace BingHomeDesktopBackground.ViewModels
         private string _shortDestinationPathName;
         private ICollectionView _imagesView;
         private string _destinationPath;
+        private ObservableCollection<PathElement> _paths;
+
         private string sourcePath { get; set; }
 
         public ICollectionView ImagesView
@@ -81,6 +83,19 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 _results = value;
 
+            }
+        }
+
+        public ObservableCollection<PathElement> Paths
+        {
+            get
+            {
+                return _paths;
+            }
+            set
+            {
+                _paths = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Paths"));
             }
         }
 
@@ -142,6 +157,11 @@ namespace BingHomeDesktopBackground.ViewModels
 
             tempPath = SettingsManager.settings.DefaultTempPath;
             sourcePath = SettingsManager.settings.DefaultSourcePath;
+            List<string> paths = SettingsManager.settings.DestinationPaths;
+            foreach(string path in paths)
+            {
+                Paths.Add(new PathElement() { FullPath=path });
+            }
 
             if (!Directory.Exists(tempPath))
             {
@@ -214,6 +234,7 @@ namespace BingHomeDesktopBackground.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 DestinationPath = dialog.SelectedPath;
+                Paths.Add(new PathElement() { FullPath = DestinationPath });
                 SettingsManager.SaveDefaultDestinationPath(DestinationPath);
             }
        
