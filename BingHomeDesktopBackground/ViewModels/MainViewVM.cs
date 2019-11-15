@@ -154,6 +154,7 @@ namespace BingHomeDesktopBackground.ViewModels
             SelectAllCommand = new RelayCommand(SelectAll);
             UnSelectAllCommand = new RelayCommand(UnSelectAll);
             OpenPopupCommand = new RelayCommand(OpenPopup);
+            Paths = new ObservableCollection<PathElement>();
 
             tempPath = SettingsManager.settings.DefaultTempPath;
             sourcePath = SettingsManager.settings.DefaultSourcePath;

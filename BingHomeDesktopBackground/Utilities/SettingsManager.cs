@@ -49,7 +49,7 @@ namespace BingHomeDesktopBackground.Utilities
             using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
             {
                 conn.CreateTable<Settings>();
-                settings = conn.Table<Settings>().FirstOrDefault();
+                settings = conn.GetAllWithChildren<Settings>()[0];
                 if (settings == null)
                 {
                     settings = new Settings
@@ -61,6 +61,9 @@ namespace BingHomeDesktopBackground.Utilities
                         DestinationPaths = new List<string>()
                     };
                     conn.Insert(settings);
+                } else if (settings.DestinationPaths == null)
+                {
+                    settings.DestinationPaths = new List<string>();
                 }
             }
         }
@@ -71,7 +74,12 @@ namespace BingHomeDesktopBackground.Utilities
             {
                 conn.CreateTable<Settings>();
                 settings.DefaultDestinationPath = path;
-                conn.Update(settings);
+                if (settings.DestinationPaths == null)
+                {
+                    settings.DestinationPaths = new List<string>();
+                }
+                settings.DestinationPaths.Add(path);
+                conn.UpdateWithChildren(settings);
             }
         }
 

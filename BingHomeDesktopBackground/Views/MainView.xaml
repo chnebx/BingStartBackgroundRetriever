@@ -124,7 +124,16 @@
                     </CheckBox.Style>
                 </CheckBox>
                 <TextBlock VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0" Foreground="#FF888888" FontWeight="Bold" Text="Destination " />
-                <ComboBox Height="30" ItemsSource="{Binding Paths, UpdateSourceTrigger=PropertyChanged}" Width="200" />
+                <ComboBox Height="30" ItemsSource="{Binding Paths, UpdateSourceTrigger=PropertyChanged}" Width="200">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ComboBox}">
+                            <StackPanel>
+                                <TextBlock Foreground="#FF666666" FontSize="20" Text="{Binding ShortPath}" />
+                                <TextBlock Foreground="#FF666666" FontSize="14" FontStyle="Italic" Text="{Binding FullPath}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <Button Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource FolderBtn}" Command="{Binding SelectDestinationPathCommand}">
                     <Button.Content>
                         <TextBlock>
