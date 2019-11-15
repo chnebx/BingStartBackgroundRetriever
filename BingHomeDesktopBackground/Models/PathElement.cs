@@ -27,7 +27,7 @@ namespace BingHomeDesktopBackground.Models
                 _fullPath = value;
                 try
                 {
-                    _shortPath = Path.GetDirectoryName(_fullPath);
+                    _shortPath = new DirectoryInfo(_fullPath).Name;
                 } catch(Exception e)
                 {
                     _shortPath = "Undefined";
