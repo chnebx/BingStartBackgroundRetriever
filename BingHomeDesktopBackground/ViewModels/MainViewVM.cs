@@ -18,6 +18,7 @@ using BingHomeDesktopBackground.Utilities;
 using System.Windows.Controls.Primitives;
 using System.Threading;
 using BingHomeDesktopBackground.Dialogs;
+using BingHomeDesktopBackground.Views.Dialogs;
 
 namespace BingHomeDesktopBackground.ViewModels
 {
@@ -140,6 +141,7 @@ namespace BingHomeDesktopBackground.ViewModels
         public RelayCommand SelectAllCommand { get; set; }
         public RelayCommand UnSelectAllCommand { get; set; }
         public RelayCommand OpenPopupCommand { get; set; }
+        public RelayCommand OpenSavedPathsCommand { get; set; }
 
         public MainViewVM()
         {
@@ -154,6 +156,7 @@ namespace BingHomeDesktopBackground.ViewModels
             SelectAllCommand = new RelayCommand(SelectAll);
             UnSelectAllCommand = new RelayCommand(UnSelectAll);
             OpenPopupCommand = new RelayCommand(OpenPopup);
+            OpenSavedPathsCommand = new RelayCommand(OpenSavedPaths);
             Paths = new ObservableCollection<PathElement>();
 
             tempPath = SettingsManager.settings.DefaultTempPath;
@@ -170,6 +173,15 @@ namespace BingHomeDesktopBackground.ViewModels
             }
             Images = SettingsManager.LoadedImages;
             CreateView();
+        }
+
+        private void OpenSavedPaths(object parameter)
+        {
+            ManageDestinationPathsDialog savedPathsDialog = new ManageDestinationPathsDialog();
+            if (savedPathsDialog.ShowDialog() == true)
+            {
+
+            }
         }
 
         private void UnSelectAll(object parameter)

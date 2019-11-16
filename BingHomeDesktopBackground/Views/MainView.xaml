@@ -159,6 +159,14 @@
                                 </TextBlock>
                             </Button.Content>
                         </Button>
+                        <Button FontFamily="{StaticResource FontAwesome}" FontSize="15" Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource AddFolderMainBtnStyle}" Command="{Binding OpenSavedPathsCommand}">
+                            <Button.Content>
+                                <TextBlock>
+                                    <Run Text="" />
+                                    <Run Text="" />
+                                </TextBlock>
+                            </Button.Content>
+                        </Button>
                         <TextBlock Width="300" Foreground="#FF888888" VerticalAlignment="Center" FontSize="14" Margin="10,0,0,0">
                         <Run Text="" FontFamily="{StaticResource FontAwesome}"></Run>
                         <Run Text=" " />
