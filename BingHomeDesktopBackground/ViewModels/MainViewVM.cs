@@ -177,7 +177,7 @@ namespace BingHomeDesktopBackground.ViewModels
 
         private void OpenSavedPaths(object parameter)
         {
-            ManageDestinationPathsDialog savedPathsDialog = new ManageDestinationPathsDialog();
+            ManageDestinationPathsDialog savedPathsDialog = new ManageDestinationPathsDialog((ObservableCollection<PathElement>)parameter);
             if (savedPathsDialog.ShowDialog() == true)
             {
 

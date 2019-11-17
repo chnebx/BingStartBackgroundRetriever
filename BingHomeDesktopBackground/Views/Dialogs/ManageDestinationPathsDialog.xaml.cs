@@ -1,5 +1,9 @@
-﻿using System;
+﻿using BingHomeDesktopBackground.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,11 +19,30 @@ namespace BingHomeDesktopBackground.Views.Dialogs
     /// <summary>
     /// Logique d'interaction pour ManageDestinationPathsDialog.xaml
     /// </summary>
-    public partial class ManageDestinationPathsDialog : Window
+    public partial class ManageDestinationPathsDialog : Window, INotifyPropertyChanged
     {
-        public ManageDestinationPathsDialog()
+        private ObservableCollection<PathElement> _pathsList;
+
+        public ObservableCollection<PathElement> PathsList
+        {
+            get
+            {
+                return _pathsList;
+            }
+            set
+            {
+                _pathsList = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("PathsList"));
+            }
+        }
+
+        public ManageDestinationPathsDialog(ObservableCollection<PathElement> paths)
         {
             InitializeComponent();
+            DataContext = this;
+            PathsList = paths;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

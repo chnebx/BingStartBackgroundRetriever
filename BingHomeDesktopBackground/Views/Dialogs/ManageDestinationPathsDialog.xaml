@@ -5,8 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BingHomeDesktopBackground.Views.Dialogs"
         mc:Ignorable="d"
-        Title="ManageDestinationPathsDialog" Height="450" Width="800">
-    <Grid>
+        Title="Manage Paths" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="flatEditBtn" TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                Width="{TemplateBinding Width}"
+                                Height="30"
+                                >
+                            <ContentPresenter TextElement.Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF2B459C" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="#FF436CA6" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Opacity" Value="0.8" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="flat" BasedOn="{StaticResource flatEditBtn}" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Margin" Value="0,7,0,7" />
+        </Style>
+    </Window.Resources>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
@@ -16,18 +54,31 @@
             <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
         <TextBlock Foreground="#FF888888" FontSize="18" VerticalAlignment="Center" FontWeight="DemiBold" Margin="5,0,0,0" Text="Destination paths" />
-        <ListBox Grid.Row="1" Grid.Column="0" />
+        <ListBox x:Name="pathsListbox" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding PathsList, UpdateSourceTrigger=PropertyChanged}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Foreground="#FF485D95" FontWeight="Bold" FontSize="16" Text="{Binding ShortPath}"></TextBlock>
+                        <TextBlock Foreground="#FF888888" FontSize="14" FontStyle="Italic" Text="{Binding FullPath}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <StackPanel Margin="0,10,0,0" Grid.Column="1" Grid.RowSpan="2">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Width" Value="80" />
-                    <Setter Property="Margin" Value="0,7,0,7" />
-                </Style>
-            </StackPanel.Resources>
-            <Button Content="Ok" />
-            <Button Content="Annuler" />
-            <Button Content="Ajouter" />
-            <Button Content="Supprimer" />
+            <Button Style="{StaticResource flat}" Content="Ok" />
+            <Button Style="{StaticResource flat}" Content="Cancel" />
+            <Button Style="{StaticResource flat}" Content="Add" />
+            <Button Content="Delete">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource flat}" TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=pathsListbox, Path=SelectedItem}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
