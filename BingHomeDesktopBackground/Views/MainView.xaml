@@ -6,7 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:BingHomeDesktopBackground"
         xmlns:viewmodels="clr-namespace:BingHomeDesktopBackground.ViewModels"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Cursor="Hand"
         >
     <UserControl.Resources>
         <Style x:Key="CheckboxStyle" TargetType="{x:Type CheckBox}">
@@ -172,13 +172,14 @@
                         <Run Text=" " />
                         <Run Text="{Binding DestinationPath}"/>
                         </TextBlock>
+                        <Button Margin="5,0,0,0" Content="Refresh" Command="{Binding RefreshWallpapersCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
                     </StackPanel>
                 </ScrollViewer>
                 <Button Grid.Column="1" Margin="10,0,0,0" Width="150" Padding="5,0,5,0" Style="{StaticResource FlatBtn}" Cursor="Hand" Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30"  Content="Copy into destination" />
 
             </Grid>
         </Border>
-        <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
+        <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding Images, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
@@ -232,8 +233,8 @@
                             <Grid.OpacityMask>
                                 <VisualBrush Visual="{Binding ElementName=mask}" />
                             </Grid.OpacityMask>
-                            <Image x:Name="ImageElement" MaxHeight="200" Source="{Binding Path=CurrentImage.UriSource}">
-                            </Image>
+                            <Image x:Name="ImageElement" MaxHeight="200" Source="{Binding Path=Image}" />
+                            <!--<TextBlock Text="{Binding Path=CurrentImage.UriSource}" />-->
                             <Border Margin="0" ClipToBounds="True">
                                 <Border.Style>
                                     <Style TargetType="{x:Type Border}">

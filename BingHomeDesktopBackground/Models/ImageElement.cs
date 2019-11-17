@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace BingHomeDesktopBackground.Models
@@ -22,6 +23,8 @@ namespace BingHomeDesktopBackground.Models
         {
             Type = ImageType.Desktop;
         }
+
+        public ImageSource Image { get; set; }
 
         public BitmapImage CurrentImage
         {

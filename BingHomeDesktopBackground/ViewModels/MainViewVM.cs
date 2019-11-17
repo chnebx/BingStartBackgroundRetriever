@@ -142,6 +142,7 @@ namespace BingHomeDesktopBackground.ViewModels
         public RelayCommand UnSelectAllCommand { get; set; }
         public RelayCommand OpenPopupCommand { get; set; }
         public RelayCommand OpenSavedPathsCommand { get; set; }
+        public RelayCommand RefreshWallpapersCommand { get; set; }
 
         public MainViewVM()
         {
@@ -157,6 +158,7 @@ namespace BingHomeDesktopBackground.ViewModels
             UnSelectAllCommand = new RelayCommand(UnSelectAll);
             OpenPopupCommand = new RelayCommand(OpenPopup);
             OpenSavedPathsCommand = new RelayCommand(OpenSavedPaths);
+            RefreshWallpapersCommand = new RelayCommand(RefreshWallpapers);
             Paths = new ObservableCollection<PathElement>();
 
             tempPath = SettingsManager.settings.DefaultTempPath;
@@ -171,9 +173,32 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 Directory.CreateDirectory(tempPath);
             }
-            Images = SettingsManager.LoadedImages;
-            CreateView();
+            //SettingsManager.RefreshWallpapers();
+            //Images = SettingsManager.LoadedImages;
+            RefreshWallpapers(null);
+            //CreateView();
         }
+
+        private void RefreshWallpapers(object obj)
+        {
+
+            Images.Clear();
+            SettingsManager.RefreshWallpapers();
+            foreach(ImageElement e in SettingsManager.LoadedImages)
+            {
+                Images.Add(e);
+            }
+            if (ImagesView == null)
+            {
+                CreateView();
+            } else
+            {
+                ImagesView.Refresh();
+            }
+            
+        }
+
+   
 
         private void OpenSavedPaths(object parameter)
         {

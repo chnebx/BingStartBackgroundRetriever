@@ -7,8 +7,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace BingHomeDesktopBackground.Utilities
 {
@@ -93,8 +96,84 @@ namespace BingHomeDesktopBackground.Utilities
                 conn.Update(settings);
             }
         }
-        
-        public static ObservableCollection<ImageElement> LoadedImages { get; set; }
+
+        public static void SynchronizeTempFilesWithSourceFiles()
+        {
+            HashSet<string> sourceElements = new HashSet<string>();
+            HashSet<string> tempElements = new HashSet<string>();
+            List<string> tempFiles = new List<string>(Directory.GetFiles(settings.DefaultTempPath));
+            foreach (string tempElement in Directory.GetFiles(settings.DefaultTempPath))
+            {
+                tempElements.Add(Path.GetFileNameWithoutExtension(tempElement));
+            }
+            foreach (string sourceElement in Directory.GetFiles(settings.DefaultSourcePath))
+            {
+                if (CheckFileIsWallpaper(sourceElement))
+                {
+                    string fileName = Path.GetFileName(sourceElement);
+                    sourceElements.Add(fileName);
+                    if (!tempElements.Contains(fileName))
+                    {
+                        var newPath = Path.Combine(settings.DefaultTempPath, fileName);
+                        var newFile = Path.ChangeExtension(newPath, ".jpg");
+                        if (!File.Exists(newFile))
+                        {
+                            File.Copy(sourceElement, newFile);
+                        }
+                    }
+                }
+            }
+            foreach (string data in tempFiles)
+            {
+                if (!sourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
+                {
+                    File.Delete(data);
+                }
+            }
+        }
+
+        public static bool CheckFileIsWallpaper(string path)
+        {
+            Bitmap img = new Bitmap(path);
+            if (img.Width > 1000 && img.Height > 1000)
+            {
+                img.Dispose();
+                return true;
+            }
+            img.Dispose();
+            return false;
+        }
+
+        public static ObservableCollection<ImageElement> LoadImagesFromTemp(string tempPath)
+        {
+            ObservableCollection<ImageElement> images = new ObservableCollection<ImageElement>();
+            foreach (string data in Directory.GetFiles(tempPath))
+            {
+                BitmapImage background = new BitmapImage();
+                background.BeginInit();
+                background.CacheOption = BitmapCacheOption.OnLoad;
+                background.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                background.UriSource = new Uri(data, UriKind.Absolute);
+                background.EndInit();
+                ImageSource TemplateImage = background;
+                ImageElement newImage = new ImageElement();
+                newImage.Image = TemplateImage;
+                newImage.CurrentImage = background;
+                newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(data).Name);
+                newImage.CreationDate = new FileInfo(data).CreationTimeUtc;
+                images.Add(newImage);
+            }
+            return images;
+        }
+
+        public static void RefreshWallpapers()
+        {
+            LoadedImages = new ObservableCollection<ImageElement>();
+            SynchronizeTempFilesWithSourceFiles();
+            LoadedImages = LoadImagesFromTemp(settings.DefaultTempPath);
+        }
+
+        public static ObservableCollection<ImageElement> LoadedImages { get; set; } = new ObservableCollection<ImageElement>();
 
         public static string ConnectionString = "Settings.db";
 
