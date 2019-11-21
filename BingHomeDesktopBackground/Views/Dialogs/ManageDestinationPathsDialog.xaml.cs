@@ -1,4 +1,5 @@
 ﻿using BingHomeDesktopBackground.Models;
+using BingHomeDesktopBackground.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,5 +45,12 @@ namespace BingHomeDesktopBackground.Views.Dialogs
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedPath = FilesManager.OpenFolderDialog();
+            PathElement newPath = new PathElement { FullPath = selectedPath };
+            PathsList.Add(newPath);
+        }
     }
 }

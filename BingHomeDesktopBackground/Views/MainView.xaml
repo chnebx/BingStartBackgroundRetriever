@@ -89,7 +89,7 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="AddFolderMainBtnStyle" BasedOn="{StaticResource FolderBtn}" TargetType="{x:Type Button}">
+        <Style x:Key="ToolbarBtnStyle" BasedOn="{StaticResource FolderBtn}" TargetType="{x:Type Button}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="False">
                     <Setter Property="Foreground" Value="#FF666666" />
@@ -151,7 +151,7 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button FontSize="15" Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource AddFolderMainBtnStyle}" Command="{Binding SelectDestinationPathCommand}">
+                        <Button FontSize="15" Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource ToolbarBtnStyle}" Command="{Binding SelectDestinationPathCommand}">
                             <Button.Content>
                                 <TextBlock>
                             <Run Text="" FontFamily="{StaticResource FontAwesome}" />
@@ -159,7 +159,7 @@
                                 </TextBlock>
                             </Button.Content>
                         </Button>
-                        <Button  Command="{Binding OpenSavedPathsCommand}" CommandParameter="{Binding Paths}" FontFamily="{StaticResource FontAwesome}" FontSize="15" Height="30" Padding="5" Margin="5,0,10,0" Style="{StaticResource AddFolderMainBtnStyle}">
+                        <Button  Command="{Binding OpenSavedPathsCommand}" CommandParameter="{Binding Paths}" FontFamily="{StaticResource FontAwesome}" FontSize="15" Height="30" Padding="5" Margin="5,0,10,0" Style="{StaticResource ToolbarBtnStyle}">
                             <Button.Content>
                                 <TextBlock>
                                     <Run Text="" />
@@ -172,9 +172,9 @@
                         <Run Text=" " />
                         <Run Text="{Binding DestinationPath}"/>
                         </TextBlock>
-                        <Button Margin="5,0,0,0" FontSize="15" BorderThickness="1" Foreground="#FF666666" BorderBrush="LightGray" Background="White" Height="30" Width="30"  FontFamily="{StaticResource FontAwesome}" Command="{Binding RefreshWallpapersCommand}" CommandParameter="{Binding ElementName=ImagesListBox}">
+                        <Button Margin="5,0,0,0" Style="{StaticResource ToolbarBtnStyle}" FontSize="15"  Height="30" Width="30"  FontFamily="{StaticResource FontAwesome}" Command="{Binding RefreshWallpapersCommand}" CommandParameter="{Binding ElementName=ImagesListBox}">
                             <TextBlock>
-                                <Run Text="" FontWeight="Bold" FontFamily="{StaticResource FontAwesome}" />
+                                <Run Text="" FontWeight="Bold" />
                             </TextBlock>
                         </Button>
                     </StackPanel>
@@ -183,7 +183,7 @@
 
             </Grid>
         </Border>
-        <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding Images, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
+        <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />

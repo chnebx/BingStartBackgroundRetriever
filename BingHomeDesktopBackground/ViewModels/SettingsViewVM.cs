@@ -79,13 +79,7 @@ namespace BingHomeDesktopBackground.ViewModels
 
         private string GetDialogPath(string path)
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
-            dialog.SelectedPath = path;
-            if (dialog.ShowDialog() == true)
-            {
-                return dialog.SelectedPath;
-            }
-            return null;
+            return FilesManager.OpenFolderDialog(path);
         }
     }
 

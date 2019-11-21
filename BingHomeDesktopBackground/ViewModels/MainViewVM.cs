@@ -173,13 +173,10 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 Directory.CreateDirectory(tempPath);
             }
-            //SettingsManager.RefreshWallpapers();
-            //Images = SettingsManager.LoadedImages;
             RefreshWallpapers(null);
-            //CreateView();
         }
 
-        private void RefreshWallpapers(object obj)
+        private void RefreshWallpapers(object parameter)
         {
 
             Images.Clear();
