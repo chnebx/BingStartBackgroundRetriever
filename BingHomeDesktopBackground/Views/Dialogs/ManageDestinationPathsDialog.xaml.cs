@@ -22,18 +22,41 @@ namespace BingHomeDesktopBackground.Views.Dialogs
     /// </summary>
     public partial class ManageDestinationPathsDialog : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<PathElement> _pathsList;
+        private PathElement _selectedPath;
+        private ObservableCollection<PathElement> _paths;
 
-        public ObservableCollection<PathElement> PathsList
+        public ObservableCollection<PathElement> Paths
         {
             get
             {
-                return _pathsList;
+                return _paths;
             }
             set
             {
-                _pathsList = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("PathsList"));
+                _paths = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Paths"));
+            }
+        }
+
+        public PathElement SelectedPath
+        {
+            get
+            {
+                return _selectedPath;
+            }
+            set
+            {
+                _selectedPath = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SelectedPath"));
+            }
+        }
+
+        private void CreateBackup(ObservableCollection<PathElement> paths)
+        {
+            Paths = new ObservableCollection<PathElement>();
+            foreach(PathElement path in paths)
+            {
+                Paths.Add(path); 
             }
         }
 
@@ -41,7 +64,7 @@ namespace BingHomeDesktopBackground.Views.Dialogs
         {
             InitializeComponent();
             DataContext = this;
-            PathsList = paths;
+            CreateBackup(paths);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -50,7 +73,23 @@ namespace BingHomeDesktopBackground.Views.Dialogs
         {
             string selectedPath = FilesManager.OpenFolderDialog();
             PathElement newPath = new PathElement { FullPath = selectedPath };
-            PathsList.Add(newPath);
+            Paths.Add(newPath);
+        }
+
+        private void DeleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Paths.Remove(SelectedPath);
+            SelectedPath = null;
+        }
+
+        private void OkBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

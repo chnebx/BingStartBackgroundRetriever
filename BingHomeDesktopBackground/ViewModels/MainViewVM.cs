@@ -129,8 +129,12 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _destinationPath = value;
-                string dirName = new DirectoryInfo(DestinationPath).Name;
-                ShortDestinationPathName = dirName;
+                if (value != null)
+                {
+                    string dirName = new DirectoryInfo(DestinationPath).Name;
+                    ShortDestinationPathName = dirName;
+                }
+                
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }
         }
@@ -202,8 +206,19 @@ namespace BingHomeDesktopBackground.ViewModels
             ManageDestinationPathsDialog savedPathsDialog = new ManageDestinationPathsDialog((ObservableCollection<PathElement>)parameter);
             if (savedPathsDialog.ShowDialog() == true)
             {
-
+                SavePaths(savedPathsDialog.Paths);
+                Paths = savedPathsDialog.Paths;
             }
+        }
+
+        private void SavePaths(ObservableCollection<PathElement> paths)
+        {
+            List<string> newPaths = new List<string>();
+            foreach (PathElement path in paths)
+            {
+                newPaths.Add(path.FullPath);
+            }
+            SettingsManager.SaveDestinationPaths(newPaths);
         }
 
         private void UnSelectAll(object parameter)

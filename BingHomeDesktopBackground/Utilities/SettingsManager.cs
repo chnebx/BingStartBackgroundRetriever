@@ -86,6 +86,17 @@ namespace BingHomeDesktopBackground.Utilities
             }
         }
 
+        public static void SaveDestinationPaths(List<string> paths)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
+            {
+                conn.CreateTable<Settings>();
+                settings.DestinationPaths = paths;
+                conn.UpdateWithChildren(settings);
+            }
+                
+        }
+
         public static void SaveSettings(string sourcePath, string tempPath)
         {
             using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
