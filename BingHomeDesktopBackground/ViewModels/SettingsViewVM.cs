@@ -11,6 +11,7 @@ namespace BingHomeDesktopBackground.ViewModels
     {
         private string _sourcePath;
         private string _tempPath;
+        private bool _isModified;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -23,6 +24,10 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _sourcePath = value;
+                if (!IsModified)
+                {
+                    IsModified = true;
+                }
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }
         }
@@ -36,21 +41,49 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _tempPath = value;
+                if (!IsModified)
+                {
+                    IsModified = true;
+                }
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TempPath"));
             }
         }
 
+        public bool IsModified
+        {
+            get 
+            { 
+                return _isModified; 
+            }
+            set 
+            { 
+                _isModified = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsModified"));
+            }
+        }
+
+
         public RelayCommand SaveSettingsCommand { get; set; }
         public RelayCommand SelectSourcePathCommand { get; set; }
         public RelayCommand SelectTempPathCommand { get; set; }
+        public RelayCommand RestoreDefaultCommand { get; set; }
 
         public SettingsViewVM()
         {
             SourcePath = SettingsManager.settings.DefaultSourcePath;
             TempPath = SettingsManager.settings.DefaultTempPath;
+            IsModified = false;
             SaveSettingsCommand = new RelayCommand(SaveSettings);
             SelectSourcePathCommand = new RelayCommand(SelectSourcePath);
             SelectTempPathCommand = new RelayCommand(SelectTempPath);
+            RestoreDefaultCommand = new RelayCommand(RestoreDefault);
+        }
+
+        private void RestoreDefault(object obj)
+        {
+            SourcePath = SettingsManager.BuildImagesSourcePath();
+            TempPath = SettingsManager.BuildTempFolderPath();
+            SettingsManager.SaveSettings();
         }
 
         private void SaveSettings(object parameter)

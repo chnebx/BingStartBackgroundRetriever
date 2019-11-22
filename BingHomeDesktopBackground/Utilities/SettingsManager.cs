@@ -32,14 +32,14 @@ namespace BingHomeDesktopBackground.Utilities
         }
 
 
-        public string BuildImagesSourcePath()
+        public static string BuildImagesSourcePath()
         {
             string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string combineWith = @"Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets";
             return Path.Combine(AppDataPath, combineWith);
         }
 
-        public string BuildTempFolderPath()
+        public static string BuildTempFolderPath()
         {
             string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string combineWith = @"BingDesktopFinder\Temp";
