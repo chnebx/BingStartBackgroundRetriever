@@ -19,6 +19,7 @@ using System.Windows.Controls.Primitives;
 using System.Threading;
 using BingHomeDesktopBackground.Dialogs;
 using BingHomeDesktopBackground.Views.Dialogs;
+using static BingHomeDesktopBackground.Models.ImageElement;
 
 namespace BingHomeDesktopBackground.ViewModels
 {
@@ -32,6 +33,8 @@ namespace BingHomeDesktopBackground.ViewModels
         private ICollectionView _imagesView;
         private string _destinationPath;
         private ObservableCollection<PathElement> _paths;
+        private Predicate<object> IsDesktopFilter = new Predicate<object>(x => ((ImageElement)x).Type == ImageType.Desktop);
+        private Predicate<object> IsPhoneFilter = new Predicate<object>(x => ((ImageElement)x).Type == ImageType.Phone);
 
         private string sourcePath { get; set; }
 
@@ -147,6 +150,7 @@ namespace BingHomeDesktopBackground.ViewModels
         public RelayCommand OpenPopupCommand { get; set; }
         public RelayCommand OpenSavedPathsCommand { get; set; }
         public RelayCommand RefreshWallpapersCommand { get; set; }
+        public RelayCommand SelectFilterCommand { get; set; }
 
         public MainViewVM()
         {
@@ -163,6 +167,7 @@ namespace BingHomeDesktopBackground.ViewModels
             OpenPopupCommand = new RelayCommand(OpenPopup);
             OpenSavedPathsCommand = new RelayCommand(OpenSavedPaths);
             RefreshWallpapersCommand = new RelayCommand(RefreshWallpapers);
+            SelectFilterCommand = new RelayCommand(SelectFilter);
             Paths = new ObservableCollection<PathElement>();
 
             tempPath = SettingsManager.settings.DefaultTempPath;
@@ -178,6 +183,26 @@ namespace BingHomeDesktopBackground.ViewModels
                 Directory.CreateDirectory(tempPath);
             }
             RefreshWallpapers(null);
+        }
+
+        private void SelectFilter(object parameter)
+        {
+            if (parameter != null && parameter is string)
+            {
+                switch (parameter.ToString())
+                {
+                    case "DesktopFilter":
+                        DefineImagesViewFilter(IsDesktopFilter);
+                        break;
+                    case "PhoneFilter":
+                        DefineImagesViewFilter(IsPhoneFilter);
+                        break;
+                    case "NoFilter":
+                    default:
+                        DefineImagesViewFilter(null);
+                        break;
+                }
+            }
         }
 
         private void RefreshWallpapers(object parameter)
@@ -199,7 +224,11 @@ namespace BingHomeDesktopBackground.ViewModels
             
         }
 
-   
+        private void DefineImagesViewFilter(Predicate<object> predicate)
+        {
+            ImagesView.Filter = predicate;
+            ImagesView.Refresh();
+        }
 
         private void OpenSavedPaths(object parameter)
         {

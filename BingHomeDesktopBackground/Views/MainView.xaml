@@ -199,7 +199,7 @@
                             </Button.Content>
                         </Button>
                         <TextBlock Margin="10,0,10,0" VerticalAlignment="Center" FontSize="16"  Foreground="#FF888888" FontWeight="Bold" Text="Filter" />
-                        <RadioButton Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <RadioButton Command="{Binding SelectFilterCommand}" CommandParameter="DesktopFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
                             <RadioButton.Content>
                                 <TextBlock>
                                     <Run Text="" FontFamily="{StaticResource FontAwesome}" />
@@ -207,7 +207,7 @@
                                 </TextBlock>
                             </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <RadioButton Command="{Binding SelectFilterCommand}" CommandParameter="PhoneFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
                             <RadioButton.Content>
                                 <TextBlock>
                                     <Run Text="" FontFamily="{StaticResource FontAwesome}" />
@@ -215,7 +215,7 @@
                                 </TextBlock>
                             </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <RadioButton Command="{Binding SelectFilterCommand}" CommandParameter="NoFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
                             <RadioButton.Content>
                                 <TextBlock>
                                     <Run Text="None" />
