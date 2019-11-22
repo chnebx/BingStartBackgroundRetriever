@@ -18,5 +18,10 @@ namespace BingHomeDesktopBackground
         {
             SettingsManager.Init();
         }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            SettingsManager.SaveSettings();
+        }
     }
 }

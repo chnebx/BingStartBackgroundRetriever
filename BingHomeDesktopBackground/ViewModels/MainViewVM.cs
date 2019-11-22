@@ -198,6 +198,7 @@ namespace BingHomeDesktopBackground.ViewModels
                 Directory.CreateDirectory(tempPath);
             }
             RefreshWallpapers(null);
+            SelectFilter(SelectedFilterName);
         }
 
         private void SelectFilter(object parameter)
@@ -205,6 +206,7 @@ namespace BingHomeDesktopBackground.ViewModels
             if (parameter != null && parameter is string)
             {
                 SelectedFilterName = parameter.ToString();
+                SettingsManager.settings.DefaultFilter = SelectedFilterName;
                 switch (parameter.ToString())
                 {
                     case "DesktopFilter":

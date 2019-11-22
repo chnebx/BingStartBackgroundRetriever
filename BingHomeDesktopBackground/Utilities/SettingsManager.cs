@@ -103,7 +103,7 @@ namespace BingHomeDesktopBackground.Utilities
                 
         }
 
-        public static void SaveSettings(string sourcePath, string tempPath)
+        public static void SaveSettingsPaths(string sourcePath, string tempPath)
         {
             using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
             {
@@ -113,6 +113,17 @@ namespace BingHomeDesktopBackground.Utilities
                 conn.Update(settings);
             }
         }
+
+        public static void SaveSettings()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
+            {
+                conn.CreateTable<Settings>();
+                conn.UpdateWithChildren(settings);
+            }
+        }
+
+
 
         public static void SynchronizeTempFilesWithSourceFiles()
         {
