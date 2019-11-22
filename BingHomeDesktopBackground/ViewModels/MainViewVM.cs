@@ -35,6 +35,7 @@ namespace BingHomeDesktopBackground.ViewModels
         private ObservableCollection<PathElement> _paths;
         private Predicate<object> IsDesktopFilter = new Predicate<object>(x => ((ImageElement)x).Type == ImageType.Desktop);
         private Predicate<object> IsPhoneFilter = new Predicate<object>(x => ((ImageElement)x).Type == ImageType.Phone);
+        private string _selectedFilterName;
 
         private string sourcePath { get; set; }
 
@@ -142,6 +143,19 @@ namespace BingHomeDesktopBackground.ViewModels
             }
         }
 
+        public string SelectedFilterName
+        {
+            get
+            {
+                return _selectedFilterName;
+            }
+            set
+            {
+                _selectedFilterName = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SelectedFilterName"));
+            }
+        }
+
         public RelayCommand ListBoxSelectionChangedCommand { get; set; }
         public RelayCommand SelectDestinationPathCommand { get; set; }
         public RelayCommand CopySelectedFilesCommand { get; set; }
@@ -159,6 +173,7 @@ namespace BingHomeDesktopBackground.ViewModels
                 return;
             }
             DestinationPath = SettingsManager.settings.DefaultDestinationPath;
+            SelectedFilterName = SettingsManager.settings.DefaultFilter;
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
             SelectDestinationPathCommand = new RelayCommand(SelectDestinationPath);
             CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
@@ -189,6 +204,7 @@ namespace BingHomeDesktopBackground.ViewModels
         {
             if (parameter != null && parameter is string)
             {
+                SelectedFilterName = parameter.ToString();
                 switch (parameter.ToString())
                 {
                     case "DesktopFilter":

@@ -16,6 +16,7 @@ namespace BingHomeDesktopBackground.Models
         public string DefaultDestinationPath { get; set; }
         public string DefaultSourcePath { get; set; }
         public string DefaultTempPath { get; set; }
+        public string DefaultFilter { get; set; }
 
         [TextBlob("Destinations")]
         public List<string> DestinationPaths { get; set; }

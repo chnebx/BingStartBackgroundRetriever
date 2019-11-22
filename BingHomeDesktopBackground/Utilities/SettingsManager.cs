@@ -52,7 +52,11 @@ namespace BingHomeDesktopBackground.Utilities
             using (SQLiteConnection conn = new SQLiteConnection(DatabaseName))
             {
                 conn.CreateTable<Settings>();
-                settings = conn.GetAllWithChildren<Settings>()[0];
+                var settingsExist = conn.GetAllWithChildren<Settings>();
+                if (settingsExist.Count > 0)
+                {
+                    settings = settingsExist[0];
+                }
                 if (settings == null)
                 {
                     settings = new Settings
@@ -61,9 +65,11 @@ namespace BingHomeDesktopBackground.Utilities
                         DefaultDestinationPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
                         DefaultTempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"BingDesktopFinder\Temp"),
                         DefaultSourcePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets"),
-                        DestinationPaths = new List<string>()
+                        DestinationPaths = new List<string>(),
+                        DefaultFilter = "NoFilter"
                     };
-                    conn.Insert(settings);
+                    settings.DestinationPaths.Add(settings.DefaultDestinationPath);
+                    conn.InsertWithChildren(settings);
                 } else if (settings.DestinationPaths == null)
                 {
                     settings.DestinationPaths = new List<string>();

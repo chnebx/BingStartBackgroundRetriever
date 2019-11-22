@@ -6,9 +6,13 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:BingHomeDesktopBackground"
         xmlns:viewmodels="clr-namespace:BingHomeDesktopBackground.ViewModels"
+        xmlns:converters="clr-namespace:BingHomeDesktopBackground.Converters"
         mc:Ignorable="d"
         >
     <UserControl.Resources>
+
+        <converters:FilterNameToBoolConverter x:Key="FilterNameToBoolConverter" />
+
         <Style x:Key="CheckboxStyle" TargetType="{x:Type CheckBox}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -190,7 +194,7 @@
                                 </TextBlock>
                             </Button.Content>
                         </Button>
-                        <Button  Command="{Binding OpenSavedPathsCommand}" CommandParameter="{Binding Paths}" FontFamily="{StaticResource FontAwesome}" FontSize="15" Height="30" Padding="5" Margin="5,0,10,0" Style="{StaticResource ToolbarBtnStyle}">
+                        <Button Command="{Binding OpenSavedPathsCommand}" CommandParameter="{Binding Paths}" FontFamily="{StaticResource FontAwesome}" FontSize="15" Height="30" Padding="5" Margin="5,0,10,0" Style="{StaticResource ToolbarBtnStyle}">
                             <Button.Content>
                                 <TextBlock>
                                     <Run Text="" />
@@ -199,7 +203,7 @@
                             </Button.Content>
                         </Button>
                         <TextBlock Margin="10,0,10,0" VerticalAlignment="Center" FontSize="16"  Foreground="#FF888888" FontWeight="Bold" Text="Filter" />
-                        <RadioButton Command="{Binding SelectFilterCommand}" CommandParameter="DesktopFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <RadioButton IsChecked="{Binding SelectedFilterName, Converter={StaticResource FilterNameToBoolConverter}, ConverterParameter='DesktopFilter'}" Command="{Binding SelectFilterCommand}" CommandParameter="DesktopFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
                             <RadioButton.Content>
                                 <TextBlock>
                                     <Run Text="" FontFamily="{StaticResource FontAwesome}" />
@@ -207,7 +211,7 @@
                                 </TextBlock>
                             </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Command="{Binding SelectFilterCommand}" CommandParameter="PhoneFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <RadioButton IsChecked="{Binding SelectedFilterName, Converter={StaticResource FilterNameToBoolConverter}, ConverterParameter='PhoneFilter'}" Command="{Binding SelectFilterCommand}" CommandParameter="PhoneFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
                             <RadioButton.Content>
                                 <TextBlock>
                                     <Run Text="" FontFamily="{StaticResource FontAwesome}" />
@@ -215,7 +219,7 @@
                                 </TextBlock>
                             </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Command="{Binding SelectFilterCommand}" CommandParameter="NoFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <RadioButton IsChecked="{Binding SelectedFilterName, Converter={StaticResource FilterNameToBoolConverter}, ConverterParameter='NoFilter'}" Command="{Binding SelectFilterCommand}" CommandParameter="NoFilter" Width="60" Height="30" BorderBrush="LightGray" Style="{StaticResource FilterRadioBtnStyle}" Margin="0,0,10,0" VerticalAlignment="Center">
                             <RadioButton.Content>
                                 <TextBlock>
                                     <Run Text="None" />
