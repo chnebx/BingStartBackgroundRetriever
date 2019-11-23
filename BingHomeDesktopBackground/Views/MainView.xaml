@@ -186,7 +186,7 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button FontSize="15" Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource ToolbarBtnStyle}" Command="{Binding SelectDestinationPathCommand}">
+                        <Button FontSize="15" Height="30" Padding="5" Margin="5,0,0,0" Style="{StaticResource ToolbarBtnStyle}" Command="{Binding AddDestinationPathCommand}">
                             <Button.Content>
                                 <TextBlock>
                             <Run Text="" FontFamily="{StaticResource FontAwesome}" />

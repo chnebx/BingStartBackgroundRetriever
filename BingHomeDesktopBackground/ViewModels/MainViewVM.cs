@@ -138,7 +138,7 @@ namespace BingHomeDesktopBackground.ViewModels
                     string dirName = new DirectoryInfo(DestinationPath).Name;
                     ShortDestinationPathName = dirName;
                 }
-                
+                SettingsManager.settings.DefaultDestinationPath = _destinationPath;
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }
         }
@@ -157,7 +157,7 @@ namespace BingHomeDesktopBackground.ViewModels
         }
 
         public RelayCommand ListBoxSelectionChangedCommand { get; set; }
-        public RelayCommand SelectDestinationPathCommand { get; set; }
+        public RelayCommand AddDestinationPathCommand { get; set; }
         public RelayCommand CopySelectedFilesCommand { get; set; }
         public RelayCommand SelectAllCommand { get; set; }
         public RelayCommand UnSelectAllCommand { get; set; }
@@ -172,10 +172,10 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 return;
             }
-            DestinationPath = SettingsManager.settings.DefaultDestinationPath;
+           
             SelectedFilterName = SettingsManager.settings.DefaultFilter;
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
-            SelectDestinationPathCommand = new RelayCommand(SelectDestinationPath);
+            AddDestinationPathCommand = new RelayCommand(AddDestinationPath);
             CopySelectedFilesCommand = new RelayCommand(CopySelectedFiles);
             SelectAllCommand = new RelayCommand(SelectAll);
             UnSelectAllCommand = new RelayCommand(UnSelectAll);
@@ -192,6 +192,7 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 Paths.Add(new PathElement() { FullPath=path });
             }
+            DestinationPath = SettingsManager.settings.DefaultDestinationPath;
 
             if (!Directory.Exists(tempPath))
             {
@@ -255,6 +256,10 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 SavePaths(savedPathsDialog.Paths);
                 Paths = savedPathsDialog.Paths;
+                if (Paths.Count > 0)
+                {
+                    DestinationPath = Paths[Paths.Count - 1].FullPath;
+                }
             }
         }
 
@@ -325,14 +330,15 @@ namespace BingHomeDesktopBackground.ViewModels
 
         }
 
-        private void SelectDestinationPath(object parameter)
+        private void AddDestinationPath(object parameter)
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
             if (dialog.ShowDialog() == true)
             {
+                Paths.Add(new PathElement() { FullPath = dialog.SelectedPath });
                 DestinationPath = dialog.SelectedPath;
-                Paths.Add(new PathElement() { FullPath = DestinationPath });
-                SettingsManager.SaveDefaultDestinationPath(DestinationPath);
+                //SettingsManager.SaveDefaultDestinationPath(DestinationPath);
+                SettingsManager.settings.DestinationPaths.Add(dialog.SelectedPath);
             }
        
         }

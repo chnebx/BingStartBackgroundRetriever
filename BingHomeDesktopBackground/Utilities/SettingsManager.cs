@@ -99,8 +99,7 @@ namespace BingHomeDesktopBackground.Utilities
                 conn.CreateTable<Settings>();
                 settings.DestinationPaths = paths;
                 conn.UpdateWithChildren(settings);
-            }
-                
+            }   
         }
 
         public static void SaveSettingsPaths(string sourcePath, string tempPath)
