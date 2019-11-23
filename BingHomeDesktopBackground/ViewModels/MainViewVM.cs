@@ -138,7 +138,7 @@ namespace BingHomeDesktopBackground.ViewModels
                     string dirName = new DirectoryInfo(DestinationPath).Name;
                     ShortDestinationPathName = dirName;
                 }
-                SettingsManager.settings.DefaultDestinationPath = _destinationPath;
+                SettingsManager.UpdateSettingsDefaultDestinationPath(_destinationPath);
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }
         }
@@ -337,8 +337,7 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 Paths.Add(new PathElement() { FullPath = dialog.SelectedPath });
                 DestinationPath = dialog.SelectedPath;
-                //SettingsManager.SaveDefaultDestinationPath(DestinationPath);
-                SettingsManager.settings.DestinationPaths.Add(dialog.SelectedPath);
+                SettingsManager.UpdateSettingsDestinationPaths(Paths);
             }
        
         }

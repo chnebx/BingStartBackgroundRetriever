@@ -1,4 +1,5 @@
 ﻿using BingHomeDesktopBackground.Models;
+using BingHomeDesktopBackground.ViewModels;
 using Microsoft.Extensions.Configuration;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
@@ -122,7 +123,26 @@ namespace BingHomeDesktopBackground.Utilities
             }
         }
 
+        public static void UpdateSettingsDestinationPaths(ObservableCollection<PathElement> paths)
+        {
+            if (paths.Count > 0)
+            {
+                List<string> PathsList = new List<string>();
+                for (int i = 0; i < paths.Count; i++)
+                {
+                    PathsList.Add(paths[i].FullPath);
+                }
+                settings.DestinationPaths = PathsList;
+            } 
+        }
 
+        public static void UpdateSettingsDefaultDestinationPath(string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                settings.DefaultDestinationPath = path;
+            }
+        }
 
         public static void SynchronizeTempFilesWithSourceFiles()
         {
