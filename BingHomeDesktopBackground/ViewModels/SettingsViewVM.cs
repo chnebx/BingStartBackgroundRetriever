@@ -3,7 +3,9 @@ using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Text;
+using System.Windows;
 
 namespace BingHomeDesktopBackground.ViewModels
 {
@@ -12,6 +14,8 @@ namespace BingHomeDesktopBackground.ViewModels
         private string _sourcePath;
         private string _tempPath;
         private bool _isModified;
+        private string _lastSavedSourcePath;
+        private string _lastSavedTempPath;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -28,6 +32,7 @@ namespace BingHomeDesktopBackground.ViewModels
                 {
                     IsModified = true;
                 }
+
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
             }
         }
@@ -72,6 +77,8 @@ namespace BingHomeDesktopBackground.ViewModels
         {
             SourcePath = SettingsManager.settings.DefaultSourcePath;
             TempPath = SettingsManager.settings.DefaultTempPath;
+            _lastSavedSourcePath = SourcePath;
+            _lastSavedTempPath = TempPath;
             IsModified = false;
             SaveSettingsCommand = new RelayCommand(SaveSettings);
             SelectSourcePathCommand = new RelayCommand(SelectSourcePath);
@@ -81,14 +88,32 @@ namespace BingHomeDesktopBackground.ViewModels
 
         private void RestoreDefault(object obj)
         {
-            SourcePath = SettingsManager.BuildImagesSourcePath();
+            SourcePath = SettingsManager.BuildImagesSourcePath();           
             TempPath = SettingsManager.BuildTempFolderPath();
             SettingsManager.SaveSettings();
+            SaveLatestPathsSettings();
+        }
+
+        private void SaveLatestPathsSettings()
+        {
+            _lastSavedSourcePath = SourcePath;
+            _lastSavedTempPath = TempPath;
         }
 
         private void SaveSettings(object parameter)
         {
+            if (!Directory.Exists(SourcePath))
+            {
+                MessageBox.Show("The source folder path you defined is not valid", "Path error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                SourcePath = _lastSavedSourcePath;
+            }
+            if (!Directory.Exists(TempPath))
+            {
+                MessageBox.Show("The temp folder path you defined is not valid", "Path error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                TempPath = _lastSavedTempPath;
+            }
             SettingsManager.SaveSettingsPaths(SourcePath, TempPath);
+            SaveLatestPathsSettings();
             IsModified = false;
         }
 
