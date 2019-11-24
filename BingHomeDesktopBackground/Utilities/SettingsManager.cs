@@ -138,10 +138,7 @@ namespace BingHomeDesktopBackground.Utilities
 
         public static void UpdateSettingsDefaultDestinationPath(string path)
         {
-            if (!string.IsNullOrWhiteSpace(path))
-            {
-                settings.DefaultDestinationPath = path;
-            }
+            settings.DefaultDestinationPath = path;
         }
 
         public static void SynchronizeTempFilesWithSourceFiles()

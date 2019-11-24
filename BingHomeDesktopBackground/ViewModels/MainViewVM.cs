@@ -259,6 +259,9 @@ namespace BingHomeDesktopBackground.ViewModels
                 if (Paths.Count > 0)
                 {
                     DestinationPath = Paths[Paths.Count - 1].FullPath;
+                } else
+                {
+                    DestinationPath = null;
                 }
             }
         }

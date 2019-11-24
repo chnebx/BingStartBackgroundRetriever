@@ -89,6 +89,7 @@ namespace BingHomeDesktopBackground.ViewModels
         private void SaveSettings(object parameter)
         {
             SettingsManager.SaveSettingsPaths(SourcePath, TempPath);
+            IsModified = false;
         }
 
         private void SelectSourcePath(object parameter)

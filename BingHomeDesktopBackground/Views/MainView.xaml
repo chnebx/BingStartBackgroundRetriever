@@ -12,6 +12,7 @@
     <UserControl.Resources>
 
         <converters:FilterNameToBoolConverter x:Key="FilterNameToBoolConverter" />
+        
 
         <Style x:Key="CheckboxStyle" TargetType="{x:Type CheckBox}">
             <Setter Property="Template">
@@ -238,6 +239,15 @@
             </Grid>
         </Border>
         <ListBox Grid.Row="1" x:Name="ImagesListBox" SelectionMode="Multiple" BorderThickness="0" Margin="20,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ImagesView, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0">
+            <ListBox.Style>
+                <Style TargetType="{x:Type ListBox}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ImagesView.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding ListBoxSelectionChangedCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" />
@@ -374,6 +384,20 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
+        <TextBlock Margin="20,0,20,0" FontSize="18" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Foreground="#FF6A8CBD">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ImagesView.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+            <Run Text="" FontFamily="{StaticResource FontAwesome}" />
+            <Run Text="No pictures found ! Go to settings and change source path to point to the right source folder" />
+        </TextBlock>
         <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="1,0,0,0" BorderBrush="LightGray" />
         <ScrollViewer Margin="10,0,0,0" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
             <StackPanel HorizontalAlignment="Center" Margin="0,20,0,0">
@@ -383,12 +407,43 @@
                         <Setter Property="Foreground" Value="#FF6A8CBD" />
                     </Style>
                 </StackPanel.Resources>
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DestinationPath}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <TextBlock  Foreground="#FFBDB26A" HorizontalAlignment="Center" Text="" FontFamily="{StaticResource FontAwesome}" />
+                    <TextBlock FontSize="18" FontWeight="Bold" Height="40" HorizontalAlignment="Center" Text="No destination selected" Foreground="#FFBDB26A">
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedImages.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <TextBlock  Foreground="#FFBDB26A" HorizontalAlignment="Center" Text="" FontFamily="{StaticResource FontAwesome}" />
+                    <TextBlock FontSize="18" FontWeight="Bold" Height="40" HorizontalAlignment="Center" Text="No images selected" Foreground="#FFBDB26A">
+                    </TextBlock>
+                </StackPanel>
+                
                 <TextBlock FontSize="18" Margin="0,0,0,10">
                 <Run FontFamily="{StaticResource FontAwesome}" Text="" ></Run>
                 <Run Text=" Selected Pictures : " />
                 <Run Text="{Binding Path=SelectedImages.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </TextBlock>
-                <ScrollViewer HorizontalAlignment="Left" Margin="10,10,0,30" MaxHeight="500" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer HorizontalAlignment="Left" Margin="10,10,0,30"  VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding SelectedImages}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
