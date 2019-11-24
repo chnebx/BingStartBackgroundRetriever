@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BingHomeDesktopBackground.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Cursor="Hand">
+             d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style x:Key="FolderBtn" TargetType="{x:Type Button}">
             <Setter Property="Template">
@@ -76,12 +76,12 @@
         <TextBlock Text="Settings" FontWeight="Bold" FontSize="35" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="#FF4487C1" />
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBlock FontSize="16" Foreground="#FF666666" Margin="0,0,10,0" Width="150" Text="Bing Assets Folder : " VerticalAlignment="Center" />
-            <TextBox Text="{Binding SourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Width="400" Height="28" Margin="0,0,0,0" />
+            <TextBlock VerticalAlignment="Center" Text="{Binding ShortSourcePath, UpdateSourceTrigger=PropertyChanged}" Foreground="#FF666666" FontSize="16" Width="400" Margin="0,0,0,0" />
             <Button Command="{Binding Path=SelectSourcePathCommand}" Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock FontSize="16" Foreground="#FF666666" Margin="0,0,10,0" Width="150" Text="Temp Folder  : " VerticalAlignment="Center" />
-            <TextBox Text="{Binding TempPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Width="400" Height="28" Margin="0,0,0,0" />
+            <TextBlock VerticalAlignment="Center" Text="{Binding ShortTempPath, UpdateSourceTrigger=PropertyChanged}" Foreground="#FF666666" FontSize="16" Width="400"  Margin="0,0,0,0" />
             <Button  Command="{Binding Path=SelectTempPathCommand}" Margin="20,0,0,0" Height="25" Content="" FontFamily="{StaticResource FontAwesome}" Style="{StaticResource FolderBtn}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3">

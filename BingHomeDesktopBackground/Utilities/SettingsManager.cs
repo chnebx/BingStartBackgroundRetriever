@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -178,14 +179,23 @@ namespace BingHomeDesktopBackground.Utilities
 
         public static bool CheckFileIsWallpaper(string path)
         {
-            Bitmap img = new Bitmap(path);
-            if (img.Width > 1000 && img.Height > 1000)
+            try
             {
+                Bitmap img = new Bitmap(path);
+                if (img.Width > 1000 && img.Height > 1000)
+                {
+                    img.Dispose();
+                    return true;
+                }
                 img.Dispose();
-                return true;
+                return false;
+            } catch(Exception e)
+            {
+                //throw new Exception("Incompatible files found");
+                return false;
             }
-            img.Dispose();
-            return false;
+            
+            
         }
 
         public static ObservableCollection<ImageElement> LoadImagesFromTemp(string tempPath)
@@ -214,7 +224,17 @@ namespace BingHomeDesktopBackground.Utilities
         {
             LoadedImages = new ObservableCollection<ImageElement>();
             SynchronizeTempFilesWithSourceFiles();
-            LoadedImages = LoadImagesFromTemp(settings.DefaultTempPath);
+            try
+            {
+                LoadedImages = LoadImagesFromTemp(settings.DefaultTempPath);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("The source folder isn't set correctly, please go to settings and change it", "Source Path Has Incompatible Files", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoadedImages = new ObservableCollection<ImageElement>();
+            }
+
+            
         }
 
         public static ObservableCollection<ImageElement> LoadedImages { get; set; } = new ObservableCollection<ImageElement>();

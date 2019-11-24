@@ -16,8 +16,39 @@ namespace BingHomeDesktopBackground.ViewModels
         private bool _isModified;
         private string _lastSavedSourcePath;
         private string _lastSavedTempPath;
-
+        private string _shortSourcePath;
         public event PropertyChangedEventHandler PropertyChanged;
+
+        
+
+        public string ShortSourcePath
+        {
+            get 
+            { 
+                return _shortSourcePath;
+            }
+            set 
+            { 
+                _shortSourcePath = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ShortSourcePath"));
+            }
+        }
+
+        private string _shortTempPath;
+
+        public string ShortTempPath
+        {
+            get 
+            { 
+                return _shortTempPath; 
+            }
+            set 
+            { 
+                _shortTempPath = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ShortTempPath"));
+            }
+        }
+
 
         public string SourcePath
         {
@@ -28,6 +59,7 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _sourcePath = value;
+                ShortSourcePath = ShortenPath(_sourcePath);
                 if (!IsModified)
                 {
                     IsModified = true;
@@ -46,6 +78,7 @@ namespace BingHomeDesktopBackground.ViewModels
             set
             {
                 _tempPath = value;
+                ShortTempPath = ShortenPath(_tempPath);
                 if (!IsModified)
                 {
                     IsModified = true;
@@ -92,6 +125,24 @@ namespace BingHomeDesktopBackground.ViewModels
             TempPath = SettingsManager.BuildTempFolderPath();
             SettingsManager.SaveSettings();
             SaveLatestPathsSettings();
+        }
+
+        private string ShortenPath(string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path) && path.Length > 50)
+            {
+                string driveLetter = path.Substring(0, 30);
+                string[] directory = path.Split(@"\");
+                string lastDirectory = directory[directory.Length - 1];
+                if (lastDirectory.Length > 10)
+                {
+                    lastDirectory = $"{lastDirectory.Substring(0, 15)}...";
+                }
+                return $"{driveLetter}...\\{lastDirectory}";
+            } else
+            {
+                return path;
+            }
         }
 
         private void SaveLatestPathsSettings()
