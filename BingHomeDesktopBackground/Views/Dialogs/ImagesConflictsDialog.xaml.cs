@@ -24,9 +24,7 @@ namespace BingHomeDesktopBackground.Views.Dialogs
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public List<ImageElement> Replaced = new List<ImageElement>();
-
-        public List<ImageElement> Renamed = new List<ImageElement>();
+        public List<ImageElement> Fixed = new List<ImageElement>();
 
         public ObservableCollection<Dictionary<ImageElement, ImageElement>> Images
         {
@@ -60,7 +58,7 @@ namespace BingHomeDesktopBackground.Views.Dialogs
             Dictionary<ImageElement, ImageElement> item = (Dictionary<ImageElement, ImageElement>)(((Button)sender).DataContext);
             foreach(KeyValuePair<ImageElement, ImageElement> data in item)
             {
-                Replaced.Add(data.Key);
+               Fixed.Add(data.Key);
                 Images.Remove(item);
             }
             CheckIfTotallySolved();
@@ -84,7 +82,7 @@ namespace BingHomeDesktopBackground.Views.Dialogs
                 if (renameDialog.ShowDialog() == true && renameDialog.PictureName != data.Key.Name)
                 {
                     data.Key.Name = renameDialog.PictureName;
-                    Renamed.Add(data.Key);
+                    Fixed.Add(data.Key);
                     Images.Remove(item);
                 }
             }

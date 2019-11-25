@@ -315,24 +315,40 @@ namespace BingHomeDesktopBackground.ViewModels
         {
             List<Dictionary<ImageElement, ImageElement>> conflicts = new List<Dictionary<ImageElement, ImageElement>>();
             if (SelectedImages.Count > 0) 
-            { 
-                foreach(ImageElement image in SelectedImages)
+            {
+                bool success = false;
+                List<ImageElement> conflictsFound = Copy(SelectedImages, out success);
+                while (conflictsFound.Count > 0)
                 {
-                    Uri imagePath = image.CurrentImage.UriSource;
-                    if (imagePath.IsFile)
+                    conflictsFound = Copy(new ObservableCollection<ImageElement>(conflictsFound), out success);
+                }
+                ((ListBox)parameter).SelectedItems.Clear();
+            }
+
+        }
+
+        private List<ImageElement> Copy(ObservableCollection<ImageElement> images, out bool successful)
+        {
+            successful = true;
+            List<Dictionary<ImageElement, ImageElement>> conflicts = new List<Dictionary<ImageElement, ImageElement>>();
+            foreach (ImageElement image in images)
+            {
+                Uri imagePath = image.CurrentImage.UriSource;
+                if (imagePath.IsFile)
+                {
+                    string fileName = Path.ChangeExtension(image.Name, ".jpg");
+                    string Destination = Path.Combine(DestinationPath, fileName);
+                    if (!File.Exists(Destination))
                     {
-                        string fileName = Path.ChangeExtension(image.Name, ".jpg");
-                        string Destination = Path.Combine(DestinationPath, fileName);
-                        if (!File.Exists(Destination))
-                        {
-                            File.Copy(image.CurrentImage.UriSource.LocalPath, Destination);
-                        } else
-                        {
-                            Dictionary<ImageElement, ImageElement> result = new Dictionary<ImageElement, ImageElement>();
-                            ImageElement conflictingPicture = SettingsManager.CreateImageFromFile(Destination);
-                            result.Add(image, conflictingPicture);
-                            conflicts.Add(result);
-                        }
+                        File.Copy(image.CurrentImage.UriSource.LocalPath, Destination);
+                    }
+                    else
+                    {
+                        successful = false;
+                        Dictionary<ImageElement, ImageElement> result = new Dictionary<ImageElement, ImageElement>();
+                        ImageElement conflictingPicture = SettingsManager.CreateImageFromFile(Destination);
+                        result.Add(image, conflictingPicture);
+                        conflicts.Add(result);
                     }
                 }
                 if (conflicts.Count > 0)
@@ -340,12 +356,11 @@ namespace BingHomeDesktopBackground.ViewModels
                     ImagesConflictsDialog conflictsDialog = new ImagesConflictsDialog(conflicts);
                     if (conflictsDialog.ShowDialog() == true)
                     {
-
+                        return conflictsDialog.Fixed;
                     }
                 }
-                ((ListBox)parameter).SelectedItems.Clear();
             }
-
+            return new List<ImageElement>();
         }
 
         private void AddDestinationPath(object parameter)
