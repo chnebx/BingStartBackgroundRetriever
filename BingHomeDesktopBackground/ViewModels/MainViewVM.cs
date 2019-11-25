@@ -313,6 +313,7 @@ namespace BingHomeDesktopBackground.ViewModels
 
         private void CopySelectedFiles(object parameter)
         {
+            List<Dictionary<ImageElement, ImageElement>> conflicts = new List<Dictionary<ImageElement, ImageElement>>();
             if (SelectedImages.Count > 0) 
             { 
                 foreach(ImageElement image in SelectedImages)
@@ -325,7 +326,21 @@ namespace BingHomeDesktopBackground.ViewModels
                         if (!File.Exists(Destination))
                         {
                             File.Copy(image.CurrentImage.UriSource.LocalPath, Destination);
+                        } else
+                        {
+                            Dictionary<ImageElement, ImageElement> result = new Dictionary<ImageElement, ImageElement>();
+                            ImageElement conflictingPicture = SettingsManager.CreateImageFromFile(Destination);
+                            result.Add(image, conflictingPicture);
+                            conflicts.Add(result);
                         }
+                    }
+                }
+                if (conflicts.Count > 0)
+                {
+                    ImagesConflictsDialog conflictsDialog = new ImagesConflictsDialog(conflicts);
+                    if (conflictsDialog.ShowDialog() == true)
+                    {
+
                     }
                 }
                 ((ListBox)parameter).SelectedItems.Clear();

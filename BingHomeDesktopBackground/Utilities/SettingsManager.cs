@@ -203,21 +203,26 @@ namespace BingHomeDesktopBackground.Utilities
             ObservableCollection<ImageElement> images = new ObservableCollection<ImageElement>();
             foreach (string data in Directory.GetFiles(tempPath))
             {
-                BitmapImage background = new BitmapImage();
-                background.BeginInit();
-                background.CacheOption = BitmapCacheOption.OnLoad;
-                background.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                background.UriSource = new Uri(data, UriKind.Absolute);
-                background.EndInit();
-                ImageSource TemplateImage = background;
-                ImageElement newImage = new ImageElement();
-                newImage.Image = TemplateImage;
-                newImage.CurrentImage = background;
-                newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(data).Name);
-                newImage.CreationDate = new FileInfo(data).CreationTimeUtc;
-                images.Add(newImage);
+                images.Add(CreateImageFromFile(data));
             }
             return images;
+        }
+
+        public static ImageElement CreateImageFromFile(string path)
+        {
+            BitmapImage background = new BitmapImage();
+            background.BeginInit();
+            background.CacheOption = BitmapCacheOption.OnLoad;
+            background.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            background.UriSource = new Uri(path, UriKind.Absolute);
+            background.EndInit();
+            ImageSource TemplateImage = background;
+            ImageElement newImage = new ImageElement();
+            newImage.Image = TemplateImage;
+            newImage.CurrentImage = background;
+            newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(path).Name);
+            newImage.CreationDate = new FileInfo(path).CreationTimeUtc;
+            return newImage;
         }
 
         public static void RefreshWallpapers()
