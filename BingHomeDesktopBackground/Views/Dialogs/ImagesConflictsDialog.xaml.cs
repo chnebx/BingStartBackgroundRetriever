@@ -58,7 +58,8 @@ namespace BingHomeDesktopBackground.Views.Dialogs
             Dictionary<ImageElement, ImageElement> item = (Dictionary<ImageElement, ImageElement>)(((Button)sender).DataContext);
             foreach(KeyValuePair<ImageElement, ImageElement> data in item)
             {
-               Fixed.Add(data.Key);
+                data.Key.CanReplace = true;
+                Fixed.Add(data.Key);
                 Images.Remove(item);
             }
             CheckIfTotallySolved();

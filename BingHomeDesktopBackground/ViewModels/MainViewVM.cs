@@ -342,6 +342,11 @@ namespace BingHomeDesktopBackground.ViewModels
                     {
                         File.Copy(image.CurrentImage.UriSource.LocalPath, Destination);
                     }
+                    else if (image.CanReplace)
+                    {
+                        File.Copy(image.CurrentImage.UriSource.LocalPath, Destination, true);
+                        image.CanReplace = false;
+                    }
                     else
                     {
                         successful = false;
@@ -351,13 +356,13 @@ namespace BingHomeDesktopBackground.ViewModels
                         conflicts.Add(result);
                     }
                 }
-                if (conflicts.Count > 0)
+            }
+            if (conflicts.Count > 0)
+            {
+                ImagesConflictsDialog conflictsDialog = new ImagesConflictsDialog(conflicts);
+                if (conflictsDialog.ShowDialog() == true)
                 {
-                    ImagesConflictsDialog conflictsDialog = new ImagesConflictsDialog(conflicts);
-                    if (conflictsDialog.ShowDialog() == true)
-                    {
-                        return conflictsDialog.Fixed;
-                    }
+                    return conflictsDialog.Fixed;
                 }
             }
             return new List<ImageElement>();

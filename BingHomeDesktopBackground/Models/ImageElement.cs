@@ -12,6 +12,7 @@ namespace BingHomeDesktopBackground.Models
         private BitmapImage _currentImage;
         private DateTime _creationDate;
         private string _name;
+        private bool _canReplace;
 
         public enum ImageType
         {
@@ -69,6 +70,17 @@ namespace BingHomeDesktopBackground.Models
             }
         }
 
+        public bool CanReplace
+        {
+            get
+            {
+                return _canReplace;
+            }
+            set
+            {
+                _canReplace = value;
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

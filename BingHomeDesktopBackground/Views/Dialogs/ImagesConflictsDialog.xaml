@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BingHomeDesktopBackground.Views.Dialogs"
         mc:Ignorable="d"
-        Title="Conflits" Height="650" MinWidth="700" MaxWidth="700" >
+        Title="Conflicts" Height="650" MinWidth="700" MaxWidth="700" >
     <Window.Resources>
         <Style x:Key="StandardFlatBtn" TargetType="{x:Type Button}">
             <Setter Property="Template">
@@ -70,7 +70,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="42" Margin="40,0,0,0" Foreground="#FF666666" VerticalAlignment="Center" Text="Conflits" />
+        <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="42" Margin="40,0,0,0" Foreground="#FF666666" VerticalAlignment="Center" Text="Conflicts" />
         <ScrollViewer Grid.Row="1" Grid.RowSpan="2">
             <StackPanel>
                 <Grid Height="50">
@@ -91,7 +91,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="0,0,0,1" BorderBrush="#FF555555">
+                            <Border BorderThickness="0,0,0,1" BorderBrush="#FFdddddd">
                                 <Grid Margin="0,20,0,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="80" />
