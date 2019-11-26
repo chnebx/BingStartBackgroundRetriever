@@ -9,6 +9,9 @@
         <ResourceDictionary>
             <FontFamily x:Key="FontAwesome">/BingHomeDesktopBackground;component/Font Awesome 5 Free-Solid-900.otf#Font Awesome 5 Free Solid</FontFamily>
             <FontFamily x:Key="Iconic">/BingHomeDesktopBackground;component/open-iconic.otf#Iconic</FontFamily>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Common/GlobalStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

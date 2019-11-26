@@ -89,5 +89,25 @@ namespace BingHomeDesktopBackground.Views.Dialogs
             }
             CheckIfTotallySolved();
         }
+
+        private void IgnoreAllBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Images.Clear();
+            CheckIfTotallySolved();
+        }
+
+        private void ReplaceAllBtn_Click(object sender, RoutedEventArgs e)
+        {
+            foreach(var item in Images)
+            {
+                foreach(KeyValuePair<ImageElement, ImageElement> data in item)
+                {
+                    data.Key.CanReplace = true;
+                    Fixed.Add(data.Key);
+                }
+            }
+            Images.Clear();
+            CheckIfTotallySolved();
+        }
     }
 }

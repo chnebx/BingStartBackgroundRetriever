@@ -447,7 +447,6 @@ namespace BingHomeDesktopBackground.ViewModels
                 Application.Current.Dispatcher.Invoke(() => {
                     LoadedImages = LoadImagesFromTemp(SettingsManager.settings.DefaultTempPath);
                 });
-                //LoadedImages = await LoadImagesFromTemp(SettingsManager.settings.DefaultTempPath);
             }
             catch (Exception e)
             {
@@ -457,7 +456,7 @@ namespace BingHomeDesktopBackground.ViewModels
             return LoadedImages;
         }
 
-        public static ImageElement CreateImageFromFile(string path)
+        public ImageElement CreateImageFromFile(string path)
         {
             BitmapImage background = new BitmapImage();
             background.BeginInit();
@@ -499,7 +498,6 @@ namespace BingHomeDesktopBackground.ViewModels
             }
             catch (Exception e)
             {
-                //throw new Exception("Incompatible files found");
                 return false;
             }
         }
