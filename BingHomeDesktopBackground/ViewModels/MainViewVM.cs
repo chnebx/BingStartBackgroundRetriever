@@ -20,6 +20,9 @@ using System.Threading;
 using BingHomeDesktopBackground.Dialogs;
 using BingHomeDesktopBackground.Views.Dialogs;
 using static BingHomeDesktopBackground.Models.ImageElement;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace BingHomeDesktopBackground.ViewModels
 {
@@ -33,9 +36,12 @@ namespace BingHomeDesktopBackground.ViewModels
         private ICollectionView _imagesView;
         private string _destinationPath;
         private ObservableCollection<PathElement> _paths;
+        private bool _selectedEverything;
         private Predicate<object> IsDesktopFilter = new Predicate<object>(x => ((ImageElement)x).Type == ImageType.Desktop);
         private Predicate<object> IsPhoneFilter = new Predicate<object>(x => ((ImageElement)x).Type == ImageType.Phone);
+        
         private string _selectedFilterName;
+        private bool _isNotLoading = true;
 
         private string sourcePath { get; set; }
 
@@ -103,6 +109,33 @@ namespace BingHomeDesktopBackground.ViewModels
                 if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Paths"));
             }
         }
+
+        public bool IsNotLoading
+        {
+            get
+            {
+                return _isNotLoading;
+            }
+            set
+            {
+                _isNotLoading = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsNotLoading"));
+            }
+        }
+
+        public bool SelectedEverything
+        {
+            get 
+            { 
+                return _selectedEverything;
+            }
+            set 
+            { 
+                _selectedEverything = value;
+                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SelectedEverything"));
+            }
+        }
+
 
 
         public string ShortDestinationPathName
@@ -172,7 +205,7 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 return;
             }
-           
+
             SelectedFilterName = SettingsManager.settings.DefaultFilter;
             ListBoxSelectionChangedCommand = new RelayCommand(ListboxSelectionChanged);
             AddDestinationPathCommand = new RelayCommand(AddDestinationPath);
@@ -184,7 +217,6 @@ namespace BingHomeDesktopBackground.ViewModels
             RefreshWallpapersCommand = new RelayCommand(RefreshWallpapers);
             SelectFilterCommand = new RelayCommand(SelectFilter);
             Paths = new ObservableCollection<PathElement>();
-
             tempPath = SettingsManager.settings.DefaultTempPath;
             sourcePath = SettingsManager.settings.DefaultSourcePath;
             List<string> paths = SettingsManager.settings.DestinationPaths;
@@ -224,29 +256,39 @@ namespace BingHomeDesktopBackground.ViewModels
             }
         }
 
-        private void RefreshWallpapers(object parameter)
+        private async void RefreshWallpapers(object parameter)
         {
-
-            Images.Clear();
-            SettingsManager.RefreshWallpapers();
-            foreach(ImageElement e in SettingsManager.LoadedImages)
+            IsNotLoading = false;
+            List<ImageElement> newImages = await Refresh();
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                Images.Add(e);
-            }
-            if (ImagesView == null)
-            {
-                CreateView();
-            } else
-            {
-                ImagesView.Refresh();
-            }
-            
+                Images.Clear();
+                   
+                foreach (ImageElement e in newImages)
+                {
+                    Images.Add(e);
+                }
+                if (ImagesView == null)
+                {
+                    CreateView();
+                        
+                }
+                else
+                {
+                    ImagesView.Refresh();
+                }
+            });
+            IsNotLoading = true;
         }
 
         private void DefineImagesViewFilter(Predicate<object> predicate)
         {
-            ImagesView.Filter = predicate;
-            ImagesView.Refresh();
+            if (ImagesView != null)
+            {
+                ImagesView.Filter = predicate;
+                ImagesView.Refresh();
+            }
+            
         }
 
         private void OpenSavedPaths(object parameter)
@@ -280,6 +322,7 @@ namespace BingHomeDesktopBackground.ViewModels
         {
             ListBox imagesListBox = (ListBox)parameter;
             imagesListBox.SelectedItems.Clear();
+            SelectedEverything = false;
         }
 
         private void SelectAll(object parameter)
@@ -289,6 +332,7 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 imagesListBox.SelectedItems.Add(image);
             }
+            SelectedEverything = true;
         }
 
         public void CreateView()
@@ -323,6 +367,10 @@ namespace BingHomeDesktopBackground.ViewModels
                     conflictsFound = Copy(new ObservableCollection<ImageElement>(conflictsFound), out success);
                 }
                 ((ListBox)parameter).SelectedItems.Clear();
+                if (SelectedEverything)
+                {
+                    SelectedEverything = false;
+                }
             }
 
         }
@@ -351,7 +399,7 @@ namespace BingHomeDesktopBackground.ViewModels
                     {
                         successful = false;
                         Dictionary<ImageElement, ImageElement> result = new Dictionary<ImageElement, ImageElement>();
-                        ImageElement conflictingPicture = SettingsManager.CreateImageFromFile(Destination);
+                        ImageElement conflictingPicture = CreateImageFromFile(Destination);
                         result.Add(image, conflictingPicture);
                         conflicts.Add(result);
                     }
@@ -388,6 +436,112 @@ namespace BingHomeDesktopBackground.ViewModels
             {
                 SelectedImages.Add((ImageElement)images[i]);
             }
+        }
+
+        public async Task<List<ImageElement>> Refresh()
+        {
+            List<ImageElement> LoadedImages = new List<ImageElement>();
+            await SynchronizeTempFilesWithSourceFiles();
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => {
+                    LoadedImages = LoadImagesFromTemp(SettingsManager.settings.DefaultTempPath);
+                });
+                //LoadedImages = await LoadImagesFromTemp(SettingsManager.settings.DefaultTempPath);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("The source folder isn't set correctly, please go to settings and change it", "Source Path Has Incompatible Files", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoadedImages = new List<ImageElement>();
+            }
+            return LoadedImages;
+        }
+
+        public static ImageElement CreateImageFromFile(string path)
+        {
+            BitmapImage background = new BitmapImage();
+            background.BeginInit();
+            background.CacheOption = BitmapCacheOption.OnLoad;
+            background.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            background.UriSource = new Uri(path, UriKind.Absolute);
+            background.EndInit();
+            ImageSource TemplateImage = background;
+            ImageElement newImage = new ImageElement();
+            newImage.Image = TemplateImage;
+            newImage.CurrentImage = background;
+            newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(path).Name);
+            newImage.CreationDate = new FileInfo(path).CreationTimeUtc;
+            return newImage;
+        }
+
+        public List<ImageElement> LoadImagesFromTemp(string tempPath)
+        {
+            List<ImageElement> images = new List<ImageElement>();
+            foreach (string data in Directory.GetFiles(tempPath))
+            {
+                images.Add(CreateImageFromFile(data));
+            }
+            return images;
+        }
+
+        public bool CheckFileIsWallpaper(string path)
+        {
+            try
+            {
+                Bitmap img = new Bitmap(path);
+                if (img.Width > 1000 && img.Height > 1000)
+                {
+                    img.Dispose();
+                    return true;
+                }
+                img.Dispose();
+                return false;
+            }
+            catch (Exception e)
+            {
+                //throw new Exception("Incompatible files found");
+                return false;
+            }
+        }
+
+
+        public async Task SynchronizeTempFilesWithSourceFiles()
+        {
+            await Task.Run(() => {
+                HashSet<string> sourceElements = new HashSet<string>();
+                HashSet<string> tempElements = new HashSet<string>();
+                List<string> tempFiles = new List<string>(Directory.GetFiles(SettingsManager.settings.DefaultTempPath));
+                foreach (string tempElement in Directory.GetFiles(SettingsManager.settings.DefaultTempPath))
+                {
+                    tempElements.Add(Path.GetFileNameWithoutExtension(tempElement));
+                }
+                foreach (string sourceElement in Directory.GetFiles(SettingsManager.settings.DefaultSourcePath))
+                {
+                    if (CheckFileIsWallpaper(sourceElement))
+                    {
+                        string fileName = Path.GetFileName(sourceElement);
+                        sourceElements.Add(fileName);
+                        if (!tempElements.Contains(fileName))
+                        {
+                            var newPath = Path.Combine(SettingsManager.settings.DefaultTempPath, fileName);
+                            var newFile = Path.ChangeExtension(newPath, ".jpg");
+                            if (!File.Exists(newFile))
+                            {
+                                File.Copy(sourceElement, newFile);
+                            }
+                        }
+                    }
+                }
+                foreach (string data in tempFiles)
+                {
+                    if (!sourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
+                    {
+                        File.Delete(data);
+                    }
+                }
+            });
+
+          
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

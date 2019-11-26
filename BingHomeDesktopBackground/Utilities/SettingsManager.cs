@@ -142,107 +142,103 @@ namespace BingHomeDesktopBackground.Utilities
             settings.DefaultDestinationPath = path;
         }
 
-        public static void SynchronizeTempFilesWithSourceFiles()
-        {
-            HashSet<string> sourceElements = new HashSet<string>();
-            HashSet<string> tempElements = new HashSet<string>();
-            List<string> tempFiles = new List<string>(Directory.GetFiles(settings.DefaultTempPath));
-            foreach (string tempElement in Directory.GetFiles(settings.DefaultTempPath))
-            {
-                tempElements.Add(Path.GetFileNameWithoutExtension(tempElement));
-            }
-            foreach (string sourceElement in Directory.GetFiles(settings.DefaultSourcePath))
-            {
-                if (CheckFileIsWallpaper(sourceElement))
-                {
-                    string fileName = Path.GetFileName(sourceElement);
-                    sourceElements.Add(fileName);
-                    if (!tempElements.Contains(fileName))
-                    {
-                        var newPath = Path.Combine(settings.DefaultTempPath, fileName);
-                        var newFile = Path.ChangeExtension(newPath, ".jpg");
-                        if (!File.Exists(newFile))
-                        {
-                            File.Copy(sourceElement, newFile);
-                        }
-                    }
-                }
-            }
-            foreach (string data in tempFiles)
-            {
-                if (!sourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
-                {
-                    File.Delete(data);
-                }
-            }
-        }
+        //public static void SynchronizeTempFilesWithSourceFiles()
+        //{
+        //    HashSet<string> sourceElements = new HashSet<string>();
+        //    HashSet<string> tempElements = new HashSet<string>();
+        //    List<string> tempFiles = new List<string>(Directory.GetFiles(settings.DefaultTempPath));
+        //    foreach (string tempElement in Directory.GetFiles(settings.DefaultTempPath))
+        //    {
+        //        tempElements.Add(Path.GetFileNameWithoutExtension(tempElement));
+        //    }
+        //    foreach (string sourceElement in Directory.GetFiles(settings.DefaultSourcePath))
+        //    {
+        //        if (CheckFileIsWallpaper(sourceElement))
+        //        {
+        //            string fileName = Path.GetFileName(sourceElement);
+        //            sourceElements.Add(fileName);
+        //            if (!tempElements.Contains(fileName))
+        //            {
+        //                var newPath = Path.Combine(settings.DefaultTempPath, fileName);
+        //                var newFile = Path.ChangeExtension(newPath, ".jpg");
+        //                if (!File.Exists(newFile))
+        //                {
+        //                    File.Copy(sourceElement, newFile);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    foreach (string data in tempFiles)
+        //    {
+        //        if (!sourceElements.Contains(Path.GetFileNameWithoutExtension(data)))
+        //        {
+        //            File.Delete(data);
+        //        }
+        //    }
+        //}
 
-        public static bool CheckFileIsWallpaper(string path)
-        {
-            try
-            {
-                Bitmap img = new Bitmap(path);
-                if (img.Width > 1000 && img.Height > 1000)
-                {
-                    img.Dispose();
-                    return true;
-                }
-                img.Dispose();
-                return false;
-            } catch(Exception e)
-            {
-                //throw new Exception("Incompatible files found");
-                return false;
-            }
-            
-            
-        }
+        //public static bool CheckFileIsWallpaper(string path)
+        //{
+        //    try
+        //    {
+        //        Bitmap img = new Bitmap(path);
+        //        if (img.Width > 1000 && img.Height > 1000)
+        //        {
+        //            img.Dispose();
+        //            return true;
+        //        }
+        //        img.Dispose();
+        //        return false;
+        //    } catch(Exception e)
+        //    {
+        //        //throw new Exception("Incompatible files found");
+        //        return false;
+        //    }
+        //}
 
-        public static ObservableCollection<ImageElement> LoadImagesFromTemp(string tempPath)
-        {
-            ObservableCollection<ImageElement> images = new ObservableCollection<ImageElement>();
-            foreach (string data in Directory.GetFiles(tempPath))
-            {
-                images.Add(CreateImageFromFile(data));
-            }
-            return images;
-        }
+        //public static ObservableCollection<ImageElement> LoadImagesFromTemp(string tempPath)
+        //{
+        //    ObservableCollection<ImageElement> images = new ObservableCollection<ImageElement>();
+        //    foreach (string data in Directory.GetFiles(tempPath))
+        //    {
+        //        images.Add(CreateImageFromFile(data));
+        //    }
+        //    return images;
+        //}
 
-        public static ImageElement CreateImageFromFile(string path)
-        {
-            BitmapImage background = new BitmapImage();
-            background.BeginInit();
-            background.CacheOption = BitmapCacheOption.OnLoad;
-            background.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-            background.UriSource = new Uri(path, UriKind.Absolute);
-            background.EndInit();
-            ImageSource TemplateImage = background;
-            ImageElement newImage = new ImageElement();
-            newImage.Image = TemplateImage;
-            newImage.CurrentImage = background;
-            newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(path).Name);
-            newImage.CreationDate = new FileInfo(path).CreationTimeUtc;
-            return newImage;
-        }
+        //public static ImageElement CreateImageFromFile(string path)
+        //{
+        //    BitmapImage background = new BitmapImage();
+        //    background.BeginInit();
+        //    background.CacheOption = BitmapCacheOption.OnLoad;
+        //    background.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+        //    background.UriSource = new Uri(path, UriKind.Absolute);
+        //    background.EndInit();
+        //    ImageSource TemplateImage = background;
+        //    ImageElement newImage = new ImageElement();
+        //    newImage.Image = TemplateImage;
+        //    newImage.CurrentImage = background;
+        //    newImage.Name = Path.GetFileNameWithoutExtension(new FileInfo(path).Name);
+        //    newImage.CreationDate = new FileInfo(path).CreationTimeUtc;
+        //    return newImage;
+        //}
 
-        public static void RefreshWallpapers()
-        {
-            LoadedImages = new ObservableCollection<ImageElement>();
-            SynchronizeTempFilesWithSourceFiles();
-            try
-            {
-                LoadedImages = LoadImagesFromTemp(settings.DefaultTempPath);
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show("The source folder isn't set correctly, please go to settings and change it", "Source Path Has Incompatible Files", MessageBoxButton.OK, MessageBoxImage.Warning);
-                LoadedImages = new ObservableCollection<ImageElement>();
-            }
+        //public static void RefreshWallpapers()
+        //{
+        //    LoadedImages = new ObservableCollection<ImageElement>();
+        //    SynchronizeTempFilesWithSourceFiles();
+        //    try
+        //    {
+        //        LoadedImages = LoadImagesFromTemp(settings.DefaultTempPath);
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        MessageBox.Show("The source folder isn't set correctly, please go to settings and change it", "Source Path Has Incompatible Files", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        LoadedImages = new ObservableCollection<ImageElement>();
+        //    }
+        //}
 
-            
-        }
-
-        public static ObservableCollection<ImageElement> LoadedImages { get; set; } = new ObservableCollection<ImageElement>();
+        //public static ObservableCollection<ImageElement> LoadedImages { get; set; } = new ObservableCollection<ImageElement>();
 
         public static string ConnectionString = "Settings.db";
 
