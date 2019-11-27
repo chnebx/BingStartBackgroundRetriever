@@ -6,65 +6,6 @@
         xmlns:local="clr-namespace:BingHomeDesktopBackground.Views.Dialogs"
         mc:Ignorable="d"
         Title="Rename" Height="160" Width="500">
-    <Window.Resources>
-        <Style x:Key="StandardFlatBtn" TargetType="{x:Type Button}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}">
-                            <ContentPresenter TextElement.Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="FolderBtn" TargetType="{x:Type Button}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Padding="{TemplateBinding Padding}" Background="White" CornerRadius="4" Width="{TemplateBinding Width}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="#FF6475C5" />
-                    <Setter Property="BorderBrush" Value="#FF6475C5" />
-                    <Setter Property="BorderThickness" Value="1.5" />
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="False">
-                    <Setter Property="Foreground" Value="#FFF1CD51" />
-                    <Setter Property="BorderBrush" Value="LightGray" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-
-        <Style x:Key="FlatBtn" TargetType="{x:Type Button}" BasedOn="{StaticResource StandardFlatBtn}">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="#FFB0B0B0" />
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsEnabled" Value="True" />
-                        <Condition Property="IsMouseOver" Value="True" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#FF1F2D66" />
-                </MultiTrigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsEnabled" Value="True" />
-                        <Condition Property="IsMouseOver" Value="False" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#FF9BAAEA" />
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
     <Grid Margin="20,0,20,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />

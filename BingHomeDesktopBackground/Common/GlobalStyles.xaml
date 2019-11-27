@@ -114,6 +114,12 @@
                 </MultiTrigger.Conditions>
                 <Setter Property="Background" Value="#FF9BAAEA" />
             </MultiTrigger>
+            
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="MainWindowFlatBtn" TargetType="{x:Type Button}" BasedOn="{StaticResource FlatBtn}">
+        <Style.Triggers>
             <DataTrigger Binding="{Binding Path=SelectedImages.Count}" Value="0">
                 <Setter Property="IsEnabled" Value="False"></Setter>
             </DataTrigger>

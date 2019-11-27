@@ -113,7 +113,7 @@
                         </Button>
                     </StackPanel>
                 </ScrollViewer>
-                <Button Grid.Column="1" Margin="10,0,0,0" Width="150" Padding="5,0,5,0" Style="{StaticResource FlatBtn}" Cursor="Hand" Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30"  Content="Copy into destination" />
+                <Button Grid.Column="1" Margin="10,0,0,0" Width="150" Padding="5,0,5,0" Style="{StaticResource MainWindowFlatBtn}" Cursor="Hand" Command="{Binding CopySelectedFilesCommand}" CommandParameter="{Binding ElementName=ImagesListBox}" Height="30"  Content="Copy into destination" />
 
             </Grid>
         </Border>
