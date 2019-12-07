@@ -358,20 +358,27 @@ namespace BingHomeDesktopBackground.ViewModels
         private void CopySelectedFiles(object parameter)
         {
             List<Dictionary<ImageElement, ImageElement>> conflicts = new List<Dictionary<ImageElement, ImageElement>>();
-            if (SelectedImages.Count > 0) 
+            try
             {
-                bool success = false;
-                List<ImageElement> conflictsFound = Copy(SelectedImages, out success);
-                while (conflictsFound.Count > 0)
+                if (SelectedImages.Count > 0)
                 {
-                    conflictsFound = Copy(new ObservableCollection<ImageElement>(conflictsFound), out success);
-                }
+                    bool success = false;
+                    List<ImageElement> conflictsFound = Copy(SelectedImages, out success);
+                    while (conflictsFound.Count > 0)
+                    {
+                        conflictsFound = Copy(new ObservableCollection<ImageElement>(conflictsFound), out success);
+                    }
                 ((ListBox)parameter).SelectedItems.Clear();
-                if (SelectedEverything)
-                {
-                    SelectedEverything = false;
+                    if (SelectedEverything)
+                    {
+                        SelectedEverything = false;
+                    }
                 }
+            } catch(Exception e)
+            {
+                MessageBox.Show("There was an error, you might want to check the destination path and make sure the one provided is valid", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            
 
         }
 
